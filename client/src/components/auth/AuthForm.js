@@ -5,7 +5,7 @@ import Button from '../common/Button';
 
 const AuthFormBlock = styled.div`
     h3 {
-        amrgin: 0;
+        margin: 0;
         color: ${palette.gray[8]};
         margin-bottom: 1rem;
     }

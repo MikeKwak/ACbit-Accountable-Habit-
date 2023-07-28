@@ -6,8 +6,9 @@ import checkLoggedIn from '../../lib/checkLoggedIn.js'
 const groups = express.Router();
 
 groups.get('/', checkLoggedIn, groupsCtrl.list)
-groups.post('/', checkLoggedIn, groupsCtrl.create)
+groups.post('/create', checkLoggedIn, groupsCtrl.create)
 groups.post('/join', checkLoggedIn, groupsCtrl.join)
+groups.post('/leave', groupsCtrl.leave)
 
 
 export default groups;

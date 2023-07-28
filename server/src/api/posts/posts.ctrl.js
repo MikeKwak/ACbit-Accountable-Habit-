@@ -1,7 +1,8 @@
 import Post from '../../models/post.js';
 import mongoose from 'mongoose';
 import sanitizeHtml from 'sanitize-html';
-import Joi from 'joi'
+import Joi from 'joi';
+import Group from '../../models/group.js';
 
 const { ObjectId } = mongoose.Types;
 
@@ -27,6 +28,24 @@ const sanitizeOption = {
         li: ['class'],
     },
     allowedSchemes: ['data', 'http'],
+};
+
+export const list = async (req, res) => {
+    const { groupID } = req.params;
+    try {
+        const group = await Group.findByID(groupID);
+        if (!group) {
+            res.sendStatus(404);
+            return;
+        }
+
+        res.send(group.posts);
+    } catch (e) {
+        console.log(e);
+        res.send(e);
+    }
+
+    //send all Posts
 };
 
 //middleware
@@ -57,31 +76,31 @@ export const write = async (req, res) => {
         // 객체가 다음 필드를 가지고 있음을 검증
         title: Joi.string().required(), // required() 가 있으면 필수 항목
         body: Joi.string().required(),
-        tags: Joi.array().items(Joi.string()).required(), // 문자열로 이루어진 배열
+        // tags: Joi.array().items(Joi.string()), // 문자열로 이루어진 배열
     });
-
-    // 검증 후, 검증 실패시 에러처리
-    const result = Joi.validate(ctx.request.body, schema);
+    const result = schema.validate(req.body);
     if (result.error) {
-        ctx.status = 400; // Bad Request
-        ctx.body = result.error;
+        res.status(400).send(result.error);
         return;
     }
 
     const { title, body, tags } = req.body;
 
-    const post = new Post({
-        title,
-        body,
-        tags,
-        user: res.locals.user,
-    });
-
-    console.log(res.locals.user);
-
     try {
-        await post.save();
-        res.send(post);
+        const newPost = new Post({
+            title,
+            body,
+            tags,
+            user: res.locals.user,
+        });
+        
+        const { groupID } = req.params;
+        const group =  await Group.findByID(groupID);
+        await group.addPost(newPost);
+        await newPost.save();
+        await group.save();
+
+        res.send(newPost);
     } catch (e) {
         res.status(500).send(e);
     }
@@ -94,43 +113,43 @@ const removeHtmlAndShorten = (body) => {
     return filtered.length < 200 ? filtered : `${filtered.slice(0, 200)}...`;
 };
 
-export const list = async (req, res) => {
-    const page = parseInt(req.query.page || '1', 10);
+// export const list = async (req, res) => {
+//     const page = parseInt(req.query.page || '1', 10);
 
-    if (page < 1) {
-        res.sendStatus(400);
-        return;
-    }
+//     if (page < 1) {
+//         res.sendStatus(400);
+//         return;
+//     }
 
-    const { tag, username } = req.query;
+//     const { tag, username } = req.query;
 
-    const query = {
-        ...(username ? { 'user.username': username } : {}),
-        ...(tag ? { tags: tag } : {}),
-    };
+//     const query = {
+//         ...(username ? { 'user.username': username } : {}),
+//         ...(tag ? { tags: tag } : {}),
+//     };
 
-    try {
-        const posts = await Post.find(query)
-            .sort({ _id: -1 })
-            .limit(10)
-            .skip((page - 1) * 10)
-            .lean()
-            .exec();
-        const postCount = await Post.countDocuments(query).exec();
-        res.set('Last-Page', Math.ceil(postCount / 10));
-        res.send(
-            posts.map((post) => ({
-                ...post,
-                body:
-                    post.body.length < 200
-                        ? post.body
-                        : `${post.body.slice(0, 200)}...`,
-            })),
-        );
-    } catch (e) {
-        res.status(500).send(e);
-    }
-};
+//     try {
+//         const posts = await Post.find(query)
+//             .sort({ _id: -1 })
+//             .limit(10)
+//             .skip((page - 1) * 10)
+//             .lean()
+//             .exec();
+//         const postCount = await Post.countDocuments(query).exec();
+//         res.set('Last-Page', Math.ceil(postCount / 10));
+//         res.send(
+//             posts.map((post) => ({
+//                 ...post,
+//                 body:
+//                     post.body.length < 200
+//                         ? post.body
+//                         : `${post.body.slice(0, 200)}...`,
+//             })),
+//         );
+//     } catch (e) {
+//         res.status(500).send(e);
+//     }
+// };
 
 export const read = async (req, res) => {
     //if this throws error I swear to fucking god
@@ -138,9 +157,13 @@ export const read = async (req, res) => {
 };
 
 export const remove = async (req, res) => {
-    const { id } = req.params;
+    const { groupID, id } = req.params;
+    console.log("gay2")
     try {
         await Post.findByIdAndRemove(id).exec();
+        const group =  await Group.findByID(groupID);
+        await group.removePost(id);
+        await group.save();
         res.sendStatus(204);
     } catch (e) {
         res.status(500).send(e);

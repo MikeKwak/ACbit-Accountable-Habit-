@@ -7,37 +7,37 @@ export const register = async (req, res) => {
         username: Joi.string().alphanum().min(3).max(20).required(),
         password: Joi.string().required(),
     });
-
     const result = schema.validate(req.body);
-
     if (result.error) {
+        console.log("Invalid username or password")
         res.status(400).send(result.error);
         return;
     }
 
     const { username, password } = req.body;
-
     try {
         const exists = await User.findByUsername(username);
-
         if (exists) {
+            console.log("username is taken")
             res.sendStatus(409);       //conflict
             return;
         }
 
+        //DB 
         const user = new User({
             username,
         });
-
         await user.setPassword(password);
         await user.save();
 
+        //generate Token
         const token = user.generateToken();
         res.cookie('access_token', token, {
             maxAge: 1000 * 60 * 60 * 24 * 7,
             httpOnly: true,
         });
-        console.log("sucess")
+
+        console.log("register sucess")
         res.send(user.serialize());
     } catch (e) {
         res.status(500).send(e);
@@ -55,11 +55,13 @@ export const login = async (req, res) => {
     try {
         const user = await User.findByUsername(username);
         if (!user) {
+            console.log("User doens't exist")
             res.sendStatus(401);
             return;
         }
-        const valid = await user.checkPassword(password);
-        if (!valid) {
+        const validPassword = await user.checkPassword(password);
+        if (!validPassword) {
+            console.log("wrong password")
             res.sendStatus(401);
             return;
         }
