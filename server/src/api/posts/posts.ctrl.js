@@ -158,12 +158,10 @@ export const read = async (req, res) => {
 
 export const remove = async (req, res) => {
     const { groupID, id } = req.params;
-    console.log("gay2")
     try {
         await Post.findByIdAndRemove(id).exec();
         const group =  await Group.findByID(groupID);
         await group.removePost(id);
-        await group.save();
         res.sendStatus(204);
     } catch (e) {
         res.status(500).send(e);

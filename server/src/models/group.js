@@ -69,7 +69,7 @@ GroupSchema.methods.addPost = function (post) {
 };
 
 GroupSchema.methods.removePost = async function(id) {
-    this.posts = this.posts.filter((post) => post._id !== id)
+    this.posts = this.posts.filter((post) => !post._id.equals(id))
     await this.save()
 }
 
