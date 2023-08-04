@@ -17,6 +17,7 @@ export const send = async (req, res) => {
             message,
             groupID,
             username,
+            createdTime
         })
         await newMessage.save();
     } catch (e) {

@@ -12,8 +12,10 @@ const ChatSchema = new Schema({
     }
 });
 
-ChatSchema.static.getMessages = function (groupID){
-    return this.find({ groupID }).exec();
+ChatSchema.statics.getMessages = async function (groupID){
+        console.log(groupID)
+    const messages = await this.find({ groupID }).exec();
+    return messages;
 }
 
 const Chat = mongoose.model('Chat', ChatSchema);

@@ -37,7 +37,6 @@ export const register = async (req, res) => {
             httpOnly: true,
         });
 
-        console.log("register sucess")
         res.send(user.serialize());
     } catch (e) {
         res.status(500).send(e);

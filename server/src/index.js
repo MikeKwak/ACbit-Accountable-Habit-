@@ -10,6 +10,7 @@ import mongoose from 'mongoose';
 import api from './api/index.js';
 import jwtMiddleware from './lib/jwtMiddleware.js';
 import cookieParser from 'cookie-parser';
+import Chat from "./models/chat.js";
 
 mongoose
     .connect(process.env.DB_URL)
@@ -21,7 +22,6 @@ mongoose
     });
 
 const app = express();
-
 
 app.use(
     bodyParser.urlencoded({
@@ -51,18 +51,29 @@ const io = new Server(server, {
 io.on('connection', (socket) => {
     console.log(`User connected ${socket.id}`);
 
-    socket.on('join_room', (data) => {
-        console.log("joined")
-        const { username, groupID } = data; // Data sent from client when join_room event emitted
+    socket.on('join_room', async (data) => {
+        console.log('joined');
+        const { groupID } = data; // Data sent from client when join_room event emitted
         socket.join(groupID); // Join the user to a socket room
+        const messages = await Chat.getMessages(groupID);
+        console.log(messages)
+        io.to(groupID).emit('last100_messages', messages)
     });
 
-    socket.on('send_message', (msg) => {
-        console.log(msg)
-        console.log(socket.id)
+    socket.on('send_message', async (msg) => {
+        console.log(msg);
+        console.log(socket.id);
         const { message, username, groupID, createdTime } = msg;
-        socket.join(groupID)
+        socket.join(groupID);
         io.to(groupID).emit('receive_message', msg);
+
+        const newMessage = new Chat({
+            message,
+            groupID,
+            username,
+            createdTime,
+        });
+        await newMessage.save();
     });
 });
 
