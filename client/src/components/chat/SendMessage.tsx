@@ -2,7 +2,6 @@ import { styled } from "styled-components";
 import React, { useState } from 'react'
 import Button from "../common/Button";
 import { Socket } from "socket.io-client";
-import axios from "axios";
 
 const SendMessageBlock = styled.div`
 

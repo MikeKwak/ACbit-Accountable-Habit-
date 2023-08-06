@@ -2,8 +2,9 @@ import { useState, useEffect, useContext } from 'react';
 import { Socket } from 'socket.io-client';
 import { styled, css } from 'styled-components';
 import { UserContext } from '../../contexts/UserContext';
+import MessageItem from './MessageItem'
 
-type Message = {
+export type Message = {
     message: String;
     groupID: String;
     username: String;
@@ -11,6 +12,8 @@ type Message = {
 };
 
 const MessagesBlock = styled.div`
+    background-color: #ddddf7;
+    padding: 10px;
     border: 1px solid black;
     overflow-y: scroll;
     width: 100%;
@@ -55,19 +58,17 @@ const ChatTimeStamp = styled.div`
     margin-top: 5px;
 `;
 
-type MessagesReceivedProps = {
+type MessagesProps = {
     socket: Socket;
 };
 
-const MessagesReceived: React.FC<MessagesReceivedProps> = ({ socket }) => {
-    const [messagesRecieved, setMessagesReceived] = useState<Message[]>([]);
-    const { user } = useContext(UserContext);
+const Messages: React.FC<MessagesProps> = ({ socket }) => {
+    const [messages, setMessages] = useState<Message[]>([]);
 
     // Runs whenever a socket event is recieved from the server
     useEffect(() => {
         const receiveMessageHandler = (data: Message) => {
-            // console.log(data.message);
-            setMessagesReceived((prevState: Message[]) => [
+            setMessages((prevState: Message[]) => [
                 ...prevState,
                 {
                     message: data.message,
@@ -98,17 +99,11 @@ const MessagesReceived: React.FC<MessagesReceivedProps> = ({ socket }) => {
 
     return (
         <MessagesBlock>
-            {messagesRecieved.map((msg, i) => (
-                <ChatMessage isCurrentUser={user!.username === msg.username}>
-                    <ChatUsername>{msg.username}</ChatUsername>
-                    <ChatContent>{msg.message}</ChatContent>
-                    <ChatTimeStamp>
-                        {formatDateFromTimestamp(msg.createdTime)}
-                    </ChatTimeStamp>
-                </ChatMessage>
+            {messages.map((msg, i) => (
+                <MessageItem message={msg} key={i}/>
             ))}
         </MessagesBlock>
     );
 };
 
-export default MessagesReceived;
+export default Messages;

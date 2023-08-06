@@ -3,7 +3,7 @@ import { styled } from 'styled-components';
 import Responsive from './Responsive';
 import Button from './Button';
 import palette from '../../lib/styles/palette';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { User } from '../../contexts/UserContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMessage } from '@fortawesome/free-solid-svg-icons';
@@ -64,7 +64,7 @@ type HeaderProps = {
 };
 
 const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
-    const { group } = useContext(GroupContext);
+    const { groupID } = useParams()
 
     return (
         <>
@@ -77,7 +77,7 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
                         <div className="right">
                             <UserInfo>{user.username}</UserInfo>
                             <Link
-                                to={`/${user.username}/${group?.groupID}/chatroom`}
+                                to={`/${user.username}/${groupID}/chatroom`}
                             >
                                 <MessegeIcon icon={faMessage} />
                             </Link>

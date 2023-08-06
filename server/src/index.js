@@ -51,9 +51,8 @@ const io = new Server(server, {
 io.on('connection', (socket) => {
     console.log(`User connected ${socket.id}`);
 
-    socket.on('join_room', async (data) => {
+    socket.on('join_room', async (groupID) => {
         console.log('joined');
-        const { groupID } = data; // Data sent from client when join_room event emitted
         socket.join(groupID); // Join the user to a socket room
         const messages = await Chat.getMessages(groupID);
         console.log(messages)
