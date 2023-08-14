@@ -21,7 +21,6 @@ export const register = async ({
         password,
     });
     
-
 // 로그인 상태 확인
 export const check = () => client.get('/api/auth/check');
 

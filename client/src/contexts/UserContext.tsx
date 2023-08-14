@@ -3,6 +3,7 @@ import { createContext, useEffect, useState } from 'react';
 export type User = {
     _id: string;
     username: string;
+    imgURL?: string
     groups?: {
         _id: string;
         name: string;

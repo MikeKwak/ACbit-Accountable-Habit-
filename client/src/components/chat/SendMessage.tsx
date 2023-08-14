@@ -1,12 +1,12 @@
-import { styled } from "styled-components";
 import React, { useState } from 'react'
+import { styled } from "styled-components";
 import Button from "../common/Button";
-import { Socket } from "socket.io-client";
 
 const SendMessageBlock = styled.div`
 
     display: grid;
     grid-template-columns: 7fr 1fr;
+    height:60px;
 `
 
 const MessageInput = styled.input`
@@ -14,22 +14,18 @@ const MessageInput = styled.input`
 `
 
 type SendMessageProps = {
-    socket: Socket;
-    username: string;
-    groupID: string;
+    sendMessage: (message: string) => void;
 }
 
-const SendMessage: React.FC<SendMessageProps> = ({ socket, username, groupID }) => {
+const SendMessage: React.FC<SendMessageProps> = ({ sendMessage }) => {
     const [ message, setMessage ] = useState('');
 
-    const sendMessage = () => {
-        if (message !== ''){
-            // Send message to server. We can't specify who we send the message to from the frontend. We can only send to server. Server can then send message to rest of users in room
-            // axios.post
-            const createdTime = Date.now();
-            socket.emit('send_message', { message, username, groupID, createdTime });
-            setMessage('');
+    const handleSubmit = () => {
+        if (message === ''){
+            return;
         }
+        sendMessage(message);
+        setMessage('');
     }
 
     return(
@@ -39,7 +35,7 @@ const SendMessage: React.FC<SendMessageProps> = ({ socket, username, groupID }) 
             onChange={(e) => setMessage(e.target.value)}
             value={message}
             />
-            <Button onClick={sendMessage}>Send</Button>
+            <Button onClick={handleSubmit}>Send</Button>
         </SendMessageBlock>
     )
 }

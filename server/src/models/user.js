@@ -5,6 +5,10 @@ import jwt from 'jsonwebtoken';
 const UserSchema = new Schema({
     username: String,
     hashedPassword: String,
+    imgURL: {
+        type: String,
+        default: null,
+    },
     groups: {
         type: [
             {
@@ -55,9 +59,14 @@ UserSchema.methods.addGroup = function (group) {
     this.groups.push(group);
 };
 
+// UserSchema.methods.uploadImage = function (imgURL) {
+//     console.log(imgURL)
+//     this.updateOne({"imgURL": imgURL})
+// };
+
 UserSchema.methods.leaveGroup = function (id) {
     this.groups = this.groups.filter((group) => group.groupID !== id);
-    return this.save()
+    return this.save();
 };
 
 const User = mongoose.model('User', UserSchema);

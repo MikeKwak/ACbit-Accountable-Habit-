@@ -1,0 +1,159 @@
+@import '../../lib/styles/palette.scss';
+
+.postlist-block {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow:hidden scroll;
+    background-color: #ededed;
+    padding: 15px;
+
+    .postlist-header {
+        display: flex;
+        flex-direction: column;
+        // justify-content: flex-end;
+        // width: 100%;
+        height: 100px;
+        padding-bottom: 0.5rem;
+        background-color: white;
+
+        a {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            img {
+                width: 20px;
+                height: 20px;
+                margin-right: 5px;
+            }
+        }
+
+        a.active {
+            font-weight: 600;
+            background-color: white;
+        }
+
+        .sort-by {
+            display: flex;
+            align-items: center;
+            padding-left: 5px;
+
+            p {
+                margin: 0;
+            }
+
+            .sort-state {
+                margin-left: 10px;
+                color: #00000033;
+                border-bottom: 1px solid black;
+            }
+
+            a {
+                padding: 5px;
+                cursor: pointer;
+            }
+        }
+
+        .create-button {
+            border: 1px solid black;
+            padding: 5px 18px;
+            border-radius: 7px;
+            margin-right: 5px;
+            cursor: pointer;
+        }
+    }
+
+    .post-block {
+        background-color: white;
+        // border: 1px solid black;
+
+        width: 100%;
+        // height: 100px;
+        padding-bottom: 5px;
+        margin-bottom: 0.25rem;
+        display: flex;
+        position: relative;
+
+        .liner {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: calc(100% + 5px);
+            height: 100%;
+            overflow: hidden;
+            &:after {
+                content: 'Marker';
+                font-size: 0;
+                position: absolute;
+                width: 10px;
+                height: 80%;
+                left: 0;
+                top: -80%;
+                border-radius: 5px;
+                background-color: rgb(0, 195, 255);
+                transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+            }
+            &.init {
+                &:after {
+                    top: 50%;
+                    transform: translateY(-50%);
+                }
+            }
+        }
+
+        .post-deadline {
+            flex: 0 0 90px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .post-content {
+            flex-grow: 1;
+            padding: 10px 0;
+
+            overflow: hidden;
+
+            h3 {
+                margin: 0;
+            }
+
+            p {
+                margin: 0;
+                padding-top: 5px;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 2; /* Number of lines to show */
+                overflow: hidden;
+            }
+        }
+
+        .post-owner {
+            flex: 0 0 45px;
+        }
+
+        &:first-child {
+            margin-top: 0.25rem;
+        }
+
+        & + & {
+            border-top: 1px solid #ccc;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 0;
+            margin-top: 0;
+
+            &:hover {
+                color: #666;
+            }
+        }
+
+        p {
+            margin-top: 2rem;
+        }
+    }
+}

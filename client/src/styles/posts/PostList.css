@@ -1,0 +1,32 @@
+.postlist-block {
+  position: relative;
+  margin-top: 1rem;
+  width: 100%;
+  overflow: hidden;
+}
+.postlist-block .write-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 3rem;
+}
+.postlist-block .post-block {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+.postlist-block .post-block:first-child {
+  padding-top: 0;
+}
+.postlist-block .post-block + .postlist-block .post-block {
+  border-top: 1px solid #ccc;
+}
+.postlist-block .post-block h2 {
+  font-size: 2rem;
+  margin-bottom: 0;
+  margin-top: 0;
+}
+.postlist-block .post-block h2:hover {
+  color: #666;
+}
+.postlist-block .post-block p {
+  margin-top: 2rem;
+}/*# sourceMappingURL=PostList.css.map */

@@ -1,0 +1,89 @@
+/* MonthlyCalendar.css */
+
+/* Low number of tasks completed */
+.low {
+    background-color: #f2f2f2; /* Light gray */
+}
+
+/* Medium number of tasks completed */
+.medium {
+    background-color: #87ceeb; /* Sky blue */
+}
+
+/* High number of tasks completed */
+.high {
+    background-color: #3cb371; /* Medium sea green */
+}
+
+/* Custom styles for the calendar container */
+.calendar-container {
+    margin: 0 auto;
+    text-align: center;
+    // padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    .react-calendar {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .react-calendar__navigation__prev2-button,
+        .react-calendar__navigation__next2-button,
+        abbr {
+            display: none;
+        }
+        .react-calendar__navigation__label,
+        .react-calendar__tile {
+            pointer-events: none;
+        }
+
+        .react-calendar__navigation {
+            width: 80%;
+            margin-bottom: 0;
+        }
+
+        .react-calendar__viewContainer {
+            .react-calendar__month-view__weekdays {
+                display: none !important;
+            }
+
+            .react-calendar__month-view__days {
+                .react-calendar__tile--now {
+                    background-color: transparent;
+                }
+
+                .react-calendar__tile {
+                    flex: none !important;
+                    width: calc(100% / 7);
+                    height: 40px; 
+                    padding: 0;
+                    margin-bottom: 5px;
+                    .day-tile {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        width: 30px;
+                        height: 30px;
+                        font-size: 14px;
+                        border-radius: 15%;
+                        margin: 0 auto;
+                        cursor: pointer;
+                        user-select: none;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.react-calendar__month-view__weekdays {
+    display: none;
+}
+
+/* Custom styles for the day tiles */
+
+.react-calendar__tile {
+    position: relative;
+}

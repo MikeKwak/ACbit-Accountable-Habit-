@@ -1,6 +1,10 @@
-import { styled } from "styled-components";
+import { css, styled } from "styled-components";
 
-const ResponsiveBlock = styled.div`
+interface ResponsiveBlockProps{
+    center? : boolean;
+}
+
+const ResponsiveBlock = styled.div<ResponsiveBlockProps>`
     padding-left: 1rem;
     padding-right: 1rem;
     width: 1024px;
@@ -13,9 +17,16 @@ const ResponsiveBlock = styled.div`
     @media (max-width: 768px) {
         width: 100%;
     }
+
+    ${(props) => 
+        props.center &&
+        css`
+            display: flex;
+            justify-content: center;
+        `}
 `
 
-type ResponsiveProps = {
+interface ResponsiveProps extends ResponsiveBlockProps{
     children: React.ReactNode;
 }
 

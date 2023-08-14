@@ -1,0 +1,158 @@
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr 1.25fr;
+  grid-template-rows: 500px;
+  -moz-column-gap: 1em;
+       column-gap: 1em;
+}
+.grid-container .column1 {
+  grid-column: 1;
+}
+.grid-container .column2 {
+  grid-column: 2;
+}
+.grid-container .column2 .groupList-block::-webkit-scrollbar {
+  display: none;
+}
+.grid-container .column2 .groupList-block {
+  height: 100%;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+}
+.grid-container .column2 .groupList-block .card {
+  margin-bottom: 10px;
+}
+.grid-container .column2 .groupList-block .card .card-content {
+  position: relative;
+  width: 100%;
+  height: 75px;
+  background-color: #fff;
+  font-size: 18px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: solid 1px #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+}
+.grid-container .column2 .groupList-block .card .card-content .name {
+  position: relative;
+  display: block;
+  z-index: 10;
+}
+.grid-container .column2 .groupList-block .card .card-content .dropdown {
+  position: absolute;
+  width: 25px;
+  margin: 7px;
+  top: 0px;
+  right: 0px;
+  opacity: 50%;
+  display: flex;
+  justify-content: center;
+}
+.grid-container .column2 .groupList-block .card .card-content .dropdown .icon {
+  transform: rotateZ(90deg);
+}
+.grid-container .column2 .groupList-block .card .card-content .dropdown:hover .icon {
+  transition: all 0.5s ease;
+  transform: rotateZ(0deg);
+}
+.grid-container .column2 .groupList-block .card .card-content .delete-button {
+  transition: all 0.5s ease;
+  display: none;
+  position: absolute;
+  bottom: -150%;
+  padding: 5px;
+  cursor: pointer;
+}
+.grid-container .column2 .groupList-block .card .card-content .dropdown:hover .delete-button {
+  display: block;
+}
+.grid-container .column2 .groupList-block .card .card-content .liner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.grid-container .column2 .groupList-block .card .card-content .liner:after {
+  content: "Marker";
+  font-size: 0;
+  position: absolute;
+  top: -15%;
+  left: -60%;
+  width: 40%;
+  height: 150%;
+  background: linear-gradient(40deg, #0c8599, #15aabf);
+  opacity: 80%;
+  transform: rotate(-6deg);
+  z-index: 9;
+  transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+.grid-container .column2 .groupList-block .card .card-content .liner.init:after {
+  left: -10%;
+}
+.grid-container .column2 .groupList-block .card:hover .controller {
+  margin-top: -5px;
+}
+.grid-container .column2 .groupList-block .card .controller {
+  display: flex;
+  border-radius: 5px;
+  align-items: center;
+  justify-content: center;
+  width: 70%;
+  margin: auto;
+  height: 30px;
+  margin-top: -30px;
+  background-color: #ddd;
+  transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.profile-block {
+  grid-column: 1;
+  width: 100%;
+  max-width: 450px;
+  height: 300px;
+  text-align: center;
+  background: #fff;
+  color: #333;
+  border-radius: 1em;
+  border: 1px solid rgba(104, 95, 95, 0.4862745098);
+  overflow: hidden;
+  margin-bottom: 2em;
+}
+.profile-block .backgroundCover {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 200px;
+  background: linear-gradient(40deg, #22b8cf, #15aabf);
+}
+.profile-block .backgroundCover label {
+  cursor: pointer;
+}
+.profile-block .backgroundCover img {
+  width: 7em;
+  height: 7em;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border-radius: 50%;
+  box-shadow: 0 0.6em 1.8em;
+}
+.profile-block .profile-content {
+  margin-top: 30px;
+  padding: 10px;
+}
+.profile-block .profile-content .name {
+  display: block;
+  padding-bottom: 2rem;
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  letter-spacing: 2px;
+}/*# sourceMappingURL=GroupPage.css.map */

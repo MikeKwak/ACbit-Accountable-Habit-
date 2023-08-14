@@ -1,0 +1,69 @@
+.chat-block {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  padding: 0 30px;
+  grid-template-rows: 8fr 1fr;
+  gap: 20px;
+  border: 1px solid white;
+  border-radius: 10px;
+}
+.chat-block .messages-block {
+  background-color: #8cdbe5;
+  padding: 10px;
+  border: 1px solid black;
+  overflow-y: scroll;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.chat-block .messages-block::-webkit-scrollbar {
+  display: none;
+}
+.chat-block .messages-block .message-block {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 5px;
+  border: 1px solid black;
+}
+.chat-block .messages-block .message-block .message-profile {
+  width: 2em;
+  height: 2em;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border-radius: 50%;
+}
+.chat-block .messages-block .message-block .message-info {
+  display: flex;
+  flex-direction: column-reverse;
+  color: gray;
+  font-weight: 300;
+}
+.chat-block .messages-block .message-block .message-content {
+  max-width: 80%;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.chat-block .messages-block .message-block .message-content .message-username {
+  text-align: right;
+  font-size: 0.75rem;
+}
+.chat-block .messages-block .message-block .message-content p {
+  margin: 0;
+  box-sizing: border-box;
+  background-color: white;
+  padding: 10px 20px;
+  border-radius: 0px 10px 10px 10px;
+  max-width: -moz-max-content;
+  max-width: max-content;
+}
+.chat-block .messages-block .message-block.owner {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+.chat-block .messages-block .message-block.owner p {
+  border-radius: 10px 0px 10px 10px;
+}/*# sourceMappingURL=Chat.css.map */

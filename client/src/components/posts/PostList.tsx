@@ -1,6 +1,5 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
-import Responsive from '../common/Responsive';
 import Button from '../common/Button';
 import palette from '../../lib/styles/palette';
 import SubInfo from '../common/SubInfo';
@@ -9,41 +8,11 @@ import { Link } from 'react-router-dom';
 import { Post, PostFormData } from '../../containers/posts/PostListContainer';
 import CreatePostModal from './CreatePostModal';
 import { UserContext } from '../../contexts/UserContext';
-
-const PostListBlock = styled(Responsive)`
-    position: relative;
-    margin-top: 3rem;
-`;
-
-const WritePostButtonWrapper = styled.div`
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 3rem;
-`;
-
-const PostItemBlock = styled.div`
-    padding-top: 3rem;
-    padding-bottom: 3rem;
-    /* 맨 위 포스트는 padding-top 없음 */
-    &:first-child {
-        padding-top: 0;
-    }
-    & + & {
-        border-top: 1px solid ${palette.gray[2]};
-    }
-
-    h2 {
-        font-size: 2rem;
-        margin-bottom: 0;
-        margin-top: 0;
-        &:hover {
-            color: ${palette.gray[6]};
-        }
-    }
-    p {
-        margin-top: 2rem;
-    }
-`;
+import '../../styles/posts/PostList.scss';
+import Upcoming from '../../img/upcoming.png';
+import Completed from '../../img/completed.png';
+import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const CompletedButton = styled(Button)`
     position: absolute;
@@ -61,27 +30,53 @@ type PostItemProps = {
 const PostItem: React.FC<PostItemProps> = ({ post, completePost }) => {
     const { publishedDate, tags, title, body, _id } = post;
     const username = post.user.username;
-    const { user } = useContext(UserContext);
-
+    const [init, setInit] = useState(false);
+    
+    useEffect(() => {
+        setTimeout(() => {
+            setInit(true);
+        }, 250);
+    }, []);
+    
     return (
-        <PostItemBlock>
-            <h2>
-                <Link to={`/@${username}/${_id}`}>{title}</Link>
-            </h2>
-            <SubInfo
-                username={username}
-                publishedDate={new Date(publishedDate)}
-            />
-            <Tags tags={tags} />
-            <p>{body}</p>
-            {user && user.username === username ? (
-                <CompletedButton onClick={() => completePost(_id)}>
-                    Complete
-                </CompletedButton>
-            ) : (
-                <></>
-            )}
-        </PostItemBlock>
+        <div className="post-block">
+            <div className={`liner ${init ? 'init' : ''}`}></div>
+
+            <div className="post-deadline">
+                <b>15 Sep</b>
+            </div>
+
+            <div className="post-content">
+                <h3>Portfolio Website</h3>
+                <div>#webdev #work</div>
+                <p>
+                    I have to finish my portfolio before getting back to Canada
+                    so that I can start applying right away once school term
+                    begins
+                </p>
+            </div>
+
+            <div className="post-owner">img</div>
+        </div>
+
+        // <div className="post-block">
+        //     <h2>
+        //         <Link to={`/@${username}/${_id}`}>{title}</Link>
+        //     </h2>
+        //     <SubInfo
+        //         username={username}
+        //         publishedDate={new Date(publishedDate)}
+        //     />
+        //     <Tags tags={tags} />
+        //     <p>{body}</p>
+        //     {user && user.username === username ? (
+        //         <CompletedButton onClick={() => completePost(_id)}>
+        //             Complete
+        //         </CompletedButton>
+        //     ) : (
+        //         <></>
+        //     )}
+        // </div>
     );
 };
 
@@ -102,20 +97,55 @@ const PostList: React.FC<PostListProps> = ({
 }) => {
     const [createModalIsOpen, setCreateModalIsOpen] = useState<boolean>(false);
     const { user } = useContext(UserContext);
+    //'createAt', 'deadline', 'user'
+    const [sort, setSort] = useState<String>('createdAt');
 
-    if (error) {
-        return <PostListBlock>Error : User / Group not selected</PostListBlock>;
+    if (!user || error) {
+        return (
+            <div className="post-block">Error : User / Group not selected</div>
+        );
     }
 
     return (
-        <PostListBlock>
-            <WritePostButtonWrapper>
-                {user && (
-                    <Button cyan onClick={() => setCreateModalIsOpen(true)}>
-                        새 글 작성하기
-                    </Button>
-                )}
-            </WritePostButtonWrapper>
+        <div className="postlist-block">
+            <div className="postlist-header">
+                <div style={{ display: 'flex', backgroundColor: '#ededed' }}>
+                    <a
+                        className="active"
+                        onClick={() => setCreateModalIsOpen(true)}
+                    >
+                        <img src={Upcoming} alt="" />
+                        Upcoming
+                    </a>
+                    <a onClick={() => setCreateModalIsOpen(true)}>
+                        <img src={Completed} alt="" />
+                        Completed
+                    </a>
+                </div>
+
+                <div
+                    style={{
+                        display: 'flex',
+                        margin: 'auto 0px',
+                        justifyContent: 'space-between',
+                        position: 'relative',
+                    }}
+                >
+                    <div className="sort-by">
+                        <p>sort by:</p>
+                        <p className="sort-state">{sort}</p>
+                        <a href="">
+                            <FontAwesomeIcon icon={faCaretDown} />
+                        </a>
+                    </div>
+                    <a
+                        className="create-button"
+                        onClick={() => setCreateModalIsOpen(true)}
+                    >
+                        Create Todo
+                    </a>
+                </div>
+            </div>
 
             <CreatePostModal
                 isOpen={createModalIsOpen}
@@ -134,7 +164,7 @@ const PostList: React.FC<PostListProps> = ({
                     ))}
                 </div>
             )}
-        </PostListBlock>
+        </div>
     );
 };
 

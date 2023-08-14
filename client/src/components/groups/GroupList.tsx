@@ -1,52 +1,13 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Group } from '../../containers/groups/GroupListContainer';
 import { UserContext } from '../../contexts/UserContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faCaretDown, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
-const GroupListBlock = styled.div`
-    margin-top: 2rem;
-    display: flex;
-`;
+import '../../styles/GroupPage.scss';
 
-const GroupItemBlock = styled.div`
-    position: relative;
-    margin-left: 20px;
-    &:first-child {
-        margin-left: 0%;
-    }
-`;
-
-const GroupLink = styled(Link)`
-    border: 1px solid black;
-    border-radius: 4px;
-    padding: 13px;
-    padding-top: 25px;
-
-    text-decoration: none;
-    color: #333;
-    transition: background-color 0.2s ease-in-out;
-
-    &:hover {
-        background-color: #f5f5f5;
-    }
-`;
-
-const DeleteButton = styled.button`
-    position: absolute;
-    top: -17px;
-    right: 5px;
-    background: transparent;
-    border: none;
-    color: red;
-    cursor: pointer;
-
-    &:hover {
-        color: darkred;
-    }
-`;
 
 type GroupItemProps = {
     group: Group;
@@ -56,43 +17,67 @@ type GroupItemProps = {
 const GroupItem: React.FC<GroupItemProps> = ({ group, deleteGroup }) => {
     const { user } = useContext(UserContext);
     const { name, groupID } = group;
+    const [init, setInit] = useState(false);
 
-    console.log(user)
-    const username = user?.username || 'guest';
+    console.log(user);
+    const username = user?.username;
+
+    useEffect(() => {
+        setTimeout(() => {
+            setInit(true);
+        }, 250);
+    }, []);
+
     return (
-        <GroupItemBlock>
-            <GroupLink
-                to={`/${username}/${groupID}`}
-            >
-                {name}
-            </GroupLink>
-            <DeleteButton onClick={() => {deleteGroup(groupID)}}>
-                <FontAwesomeIcon icon={faTrashAlt} />
-            </DeleteButton>
-        </GroupItemBlock>
+        <div className="card">
+            <Link to={`/${username}/${groupID}`}>
+                <div className="card-content">
+                    <div className={`liner ${init ? 'init' : ''}`}></div>
+                    <span className="name">{name}</span>
+                    <div className="dropdown">
+                        <FontAwesomeIcon className="icon" icon={faCaretDown} />
+                        <button
+                            className="delete-button"
+                            onClick={() => {
+                                deleteGroup(groupID);
+                            }}
+                        >
+                            <FontAwesomeIcon icon={faTrashAlt} />
+                        </button>
+                    </div>
+                </div>
+            </Link>
+            <div className="controller">Controller</div>
+        </div>
+
+        // <GroupItemBlock>
+        //     <GroupLink
+        //         to={`/${username}/${groupID}`}
+        //     >
+        //         {name}
+        //     </GroupLink>
+        //     <DeleteButton onClick={() => {deleteGroup(groupID)}}>
+        //         <FontAwesomeIcon icon={faTrashAlt} />
+        //     </DeleteButton>
+        // </GroupItemBlock>
     );
 };
 
 type GroupListProps = {
     groups: Group[];
     loading: boolean;
-    error: boolean;
     deleteGroup: (id: string) => void;
 };
 
 const GroupList: React.FC<GroupListProps> = ({
     groups,
     loading,
-    error,
     deleteGroup,
 }) => {
-    if (error) {
-    }
-
     return (
         <>
             {!loading && groups && (
-                <GroupListBlock>
+                <div className="groupList-block">
                     {groups.map((group) => (
                         <GroupItem
                             group={group}
@@ -100,7 +85,7 @@ const GroupList: React.FC<GroupListProps> = ({
                             key={group.groupID}
                         />
                     ))}
-                </GroupListBlock>
+                </div>
             )}
         </>
     );

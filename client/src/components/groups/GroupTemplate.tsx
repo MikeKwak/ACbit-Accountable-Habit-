@@ -30,6 +30,7 @@ const WhiteBox = styled.div`
         font-weight: bold;
         letter-spacing: 2px;
     }
+
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.025);
     padding: 2rem;
 
@@ -44,7 +45,7 @@ const GroupTemplate = ({ children }: { children: ReactNode }) => {
                 <div className="logo-area">
                     <Link to="/">ACbit</Link>
                 </div>
-                {children}
+                <div className="content">{children}</div>
             </WhiteBox>
         </GroupTemplateBlock>
     );

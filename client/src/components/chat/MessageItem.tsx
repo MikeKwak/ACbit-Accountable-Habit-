@@ -1,45 +1,8 @@
-import React, { HTMLAttributes, useContext, useEffect, useRef } from "react";
-import { styled, css } from "styled-components";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { UserContext } from "../../contexts/UserContext";
-import { Message } from './Messages'
-
-interface StyledMessageBlockProps extends HTMLAttributes<HTMLDivElement> {
-    owner?: boolean;
-}
-
-const MessageBlock = styled.div<StyledMessageBlockProps>`
-    display: flex;
-    gap: 20px;
-    margin-bottom: 20px;
-
-    ${(props) =>
-        props.owner &&
-        css`
-            align-self: flex-end;
-            background-color: #ffc0cb;
-        `}
-`
-
-const MessageInfo = styled.div`
-    display: flex;
-            flex-direction: column;
-            color: gray;
-            font-weight: 300;
-`
-
-const MessageContent = styled.div`
-    max-width: 80%;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-`
-
-const MessageText = styled.p`
-    background-color: white;
-              padding: 10px 20px;
-              border-radius: 0px 10px 10px 10px;
-              max-width: max-content;
-`
+import { Message } from "../../containers/chat/ChatContainer";
+import * as profileAPI from '../../lib/api/profile';
+import { AxiosResponse } from "axios";
 
 type MessageProps = {
     message: Message;
@@ -47,22 +10,30 @@ type MessageProps = {
 
 const MessageItem: React.FC<MessageProps> = ({ message }) => {
     const { user } = useContext(UserContext);
+    const [ imageURL, setImageURL ] = useState<string>('')
 
     const ref = useRef<HTMLDivElement>(null);
+
+
     useEffect(() => {
+profileAPI.getImage(message.username).then((res: AxiosResponse<string>) => {
+    setImageURL(res.data);
+})
         ref.current?.scrollIntoView({ behavior: "smooth" });
     }, [message]);
 
     return (
-        <MessageBlock ref={ref} owner={message.username === user!.username ? true : false} >
-            <MessageInfo>
-                <span>just now</span>
-            </MessageInfo>
-            <MessageContent>
-                <MessageText>{message.message}</MessageText>
-            </MessageContent>
+        <div ref={ref} className={`message-block ${message.username === user!.username ? 'owner' : ''}`} >
+            <img className="message-profile" src={imageURL} alt="" />
+            <div className="message-content">
+                <div className="message-username">{message.username}</div>
+                <p>{message.message}</p>
+            </div>
+            <div className="message-info">
+                just now
+            </div>
 
-        </MessageBlock>
+        </div>
     )
 }
 

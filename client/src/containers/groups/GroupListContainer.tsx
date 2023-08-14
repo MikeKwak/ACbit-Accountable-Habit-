@@ -3,6 +3,9 @@ import GroupList from '../../components/groups/GroupList';
 import * as groupAPI from '../../lib/api/groups';
 import { AxiosResponse } from 'axios';
 import GroupForm from '../../components/groups/GroupForm';
+import Profile from '../../components/groups/Profile';
+import { styled } from 'styled-components';
+import '../../styles/GroupPage.scss';
 
 export type Group = {
     groupID: string;
@@ -22,7 +25,7 @@ export type JoinFormData = {
 const GroupListContainer: React.FC = () => {
     const [groups, setGroups] = useState<Group[]>([]);
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<boolean>(false);
+    const [error, setError] = useState('');
 
     const deleteGroup = (id: string) => {
         //API call
@@ -37,6 +40,12 @@ const GroupListContainer: React.FC = () => {
     };
 
     const createGroup = (formData: CreateFormData) => {
+        setError('');
+        if (!formData.name || !formData.password) {
+            setError('Missing Field');
+            return;
+        }
+
         //API call
         groupAPI
             .create(formData)
@@ -53,6 +62,12 @@ const GroupListContainer: React.FC = () => {
     };
 
     const joinGroup = (formData: JoinFormData) => {
+
+        if (!formData.groupID || !formData.password) {
+            setError('Missing Field');
+            return;
+        }
+
         //API call
         groupAPI
             .join(formData)
@@ -74,23 +89,30 @@ const GroupListContainer: React.FC = () => {
                 setLoading(false);
             })
             .catch((error) => {
-                console.error('Error fetching posts:', error);
-                setError(true);
+                console.error('Error fetching groups:', error);
+                setError('Server Error');
                 setLoading(false);
             });
     }, []);
 
     return (
-        <>
-            <GroupList
-                loading={loading}
-                error={error}
-                groups={groups}
-                deleteGroup={deleteGroup}
-            />
-
-            <GroupForm createGroup={createGroup} joinGroup={joinGroup} />
-        </>
+        <div className='grid-container'>
+            <div className="column1">
+                <Profile />
+                <GroupForm
+                    createGroup={createGroup}
+                    joinGroup={joinGroup}
+                    error={error}
+                />
+            </div>
+            <div className="column2">
+                <GroupList
+                    loading={loading}
+                    groups={groups}
+                    deleteGroup={deleteGroup}
+                />
+            </div>
+        </div>
     );
 };
 
