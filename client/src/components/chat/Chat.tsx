@@ -11,16 +11,6 @@ type ChatProps = {
 }
 
 const Chat: React.FC<ChatProps> = ({ socket, messages, sendMessage }) => {
-    // const { user } = useContext(UserContext);
-    // const { groupID } = useParams();
-
-    // if (!user || !groupID) {
-    //     // Render a loading state or handle the case when user or group is null
-    //     console.log(user);
-    //     console.log(groupID);
-
-    //     return <div>Loading...</div>;
-    // }
 
     return (
         <div className='chat-block'>

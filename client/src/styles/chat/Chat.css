@@ -1,11 +1,9 @@
 .chat-block {
+  display: flex;
+  flex-direction: column;
   width: 100%;
   height: 100%;
-  display: grid;
-  padding: 0 30px;
-  grid-template-rows: 8fr 1fr;
-  gap: 20px;
-  border: 1px solid white;
+  padding: 30px;
   border-radius: 10px;
 }
 .chat-block .messages-block {
@@ -14,6 +12,7 @@
   border: 1px solid black;
   overflow-y: scroll;
   width: 100%;
+  height: 85%;
   display: flex;
   flex-direction: column;
   -ms-overflow-style: none;
@@ -66,4 +65,47 @@
 }
 .chat-block .messages-block .message-block.owner p {
   border-radius: 10px 0px 10px 10px;
+}
+.chat-block .textarea-block {
+  border: 1px solid black;
+  width: 100%;
+  height: 15%;
+  display: flex;
+}
+.chat-block .textarea-block .textarea-container {
+  width: 80%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.chat-block .textarea-block .textarea-container .textarea {
+  outline: none;
+  display: inline-block;
+  border: solid 1px #000;
+  border-radius: 12px;
+  padding: 10px 6px;
+  font-size: 1rem;
+  min-height: 1em;
+  max-height: 5em;
+  width: 380px;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.chat-block .textarea-block .textarea-container .textarea::-webkit-scrollbar {
+  display: none;
+}
+.chat-block .textarea-block .send-container {
+  width: 20%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.chat-block .textarea-block .send-container .send-button {
+  border: 1px solid black;
+  border-radius: 50%;
+  height: 80px;
+  width: 80px;
 }/*# sourceMappingURL=Chat.css.map */

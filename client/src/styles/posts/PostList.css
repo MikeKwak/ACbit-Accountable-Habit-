@@ -1,20 +1,116 @@
 .postlist-block {
   position: relative;
-  margin-top: 1rem;
   width: 100%;
-  overflow: hidden;
+  height: 100%;
+  overflow: hidden scroll;
+  background-color: #ededed;
+  padding: 15px;
 }
-.postlist-block .write-container {
+.postlist-block .postlist-header {
   display: flex;
-  justify-content: flex-end;
-  margin-bottom: 3rem;
+  flex-direction: column;
+  height: 100px;
+  padding-bottom: 0.5rem;
+  background-color: white;
+}
+.postlist-block .postlist-header a {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+}
+.postlist-block .postlist-header a img {
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+}
+.postlist-block .postlist-header a.active {
+  font-weight: 600;
+  background-color: white;
+}
+.postlist-block .postlist-header .sort-by {
+  display: flex;
+  align-items: center;
+  padding-left: 5px;
+}
+.postlist-block .postlist-header .sort-by p {
+  margin: 0;
+}
+.postlist-block .postlist-header .sort-by .sort-state {
+  margin-left: 10px;
+  color: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid black;
+}
+.postlist-block .postlist-header .sort-by a {
+  padding: 5px;
+  cursor: pointer;
+}
+.postlist-block .postlist-header .create-button {
+  border: 1px solid black;
+  padding: 5px 18px;
+  border-radius: 7px;
+  margin-right: 5px;
+  cursor: pointer;
 }
 .postlist-block .post-block {
-  padding-top: 3rem;
-  padding-bottom: 3rem;
+  background-color: white;
+  width: 100%;
+  padding-bottom: 5px;
+  margin-bottom: 0.25rem;
+  display: flex;
+  position: relative;
+}
+.postlist-block .post-block .liner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: calc(100% + 5px);
+  height: 100%;
+  overflow: hidden;
+}
+.postlist-block .post-block .liner:after {
+  content: "Marker";
+  font-size: 0;
+  position: absolute;
+  width: 10px;
+  height: 80%;
+  left: 0;
+  top: -80%;
+  border-radius: 5px;
+  background-color: rgb(0, 195, 255);
+  transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+.postlist-block .post-block .liner.init:after {
+  top: 50%;
+  transform: translateY(-50%);
+}
+.postlist-block .post-block .post-deadline {
+  flex: 0 0 90px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+.postlist-block .post-block .post-content {
+  flex-grow: 1;
+  padding: 10px 0;
+  overflow: hidden;
+}
+.postlist-block .post-block .post-content h3 {
+  margin: 0;
+}
+.postlist-block .post-block .post-content p {
+  margin: 0;
+  padding-top: 5px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2; /* Number of lines to show */
+  overflow: hidden;
+}
+.postlist-block .post-block .post-owner {
+  flex: 0 0 45px;
 }
 .postlist-block .post-block:first-child {
-  padding-top: 0;
+  margin-top: 0.25rem;
 }
 .postlist-block .post-block + .postlist-block .post-block {
   border-top: 1px solid #ccc;
