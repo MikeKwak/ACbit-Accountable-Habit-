@@ -1,5 +1,6 @@
 import User from '../../models/user.js';
 
+//reduce img size
 export const uploadImage = async (req, res) => {
     const { imgURL } = req.body;
     const user = await User.findByUsername(res.locals.user.username);
@@ -13,7 +14,6 @@ export const uploadImage = async (req, res) => {
     console.log(user)
     res.send();
 };
-
 
 export const getImage = async (req, res) => {
     const { username } = req.params;

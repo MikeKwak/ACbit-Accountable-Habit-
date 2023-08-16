@@ -10,15 +10,19 @@ export type Post = {
     body: string;
     tags: string[];
     publishedDate: Date;
+    deadlineDate: Date;
     user: {
         _id: string;
         username: string;
+        imgURL: string;
     };
 };
 
 export type PostFormData = {
     title: string;
+    tags: string;
     body: string;
+    deadline: string;
 };
 
 const PostListContainer: React.FC = () => {

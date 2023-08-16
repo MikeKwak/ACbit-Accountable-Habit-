@@ -14,13 +14,14 @@ const PostSchema = new Schema({
         type: Date,
         default: Date.now,
     },
-    deadlineDate: {
-        type: Date,
-        default: null, 
-    },
+    deadlineDate: Date,
     user: {
         _id: mongoose.Types.ObjectId,
         username: String,
+        imgURL: {
+            type: String,
+            default: null,
+        },
     },
 });
 

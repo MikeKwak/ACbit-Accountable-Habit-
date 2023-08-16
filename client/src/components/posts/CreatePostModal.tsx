@@ -29,16 +29,21 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({
 }) => {
     const [postForm, setPostForm] = useState<PostFormData>({
         title: '',
+        tags: '',
         body: '',
+        deadline: '',
     });
 
     const handleCreate = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         createPost(postForm);
+
         setPostForm({
             title: '',
+            tags: '',
             body: '',
+            deadline: '',
         });
         onRequestClose(false);
     };
@@ -71,12 +76,32 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({
                     />
                 </div>
                 <div>
+                    <label>Tags:</label>
+                    <input
+                        autoComplete="tags"
+                        name="tags"
+                        placeholder="tags"
+                        onChange={handleChange}
+                        value={postForm.tags}
+                    />
+                </div>
+                <div>
                     <label>Body:</label>
                     <textarea
                         name="body"
                         placeholder="body"
                         onChange={handleChange}
                         value={postForm.body}
+                    />
+                </div>
+                <div>
+                    <label>Deadline:</label>
+                    <input
+                        autoComplete="deadline"
+                        name="deadline"
+                        placeholder="deadline"
+                        onChange={handleChange}
+                        value={postForm.deadline}
                     />
                 </div>
                 <Button type="submit">Submit</Button>

@@ -1,10 +1,4 @@
 import React, { useState, useContext, useEffect } from 'react';
-import styled from 'styled-components';
-import Button from '../common/Button';
-import palette from '../../lib/styles/palette';
-import SubInfo from '../common/SubInfo';
-import Tags from '../common/Tags';
-import { Link } from 'react-router-dom';
 import { Post, PostFormData } from '../../containers/posts/PostListContainer';
 import CreatePostModal from './CreatePostModal';
 import { UserContext } from '../../contexts/UserContext';
@@ -14,69 +8,74 @@ import Completed from '../../img/completed.png';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const CompletedButton = styled(Button)`
-    position: absolute;
-    right: 0px;
-    &:hover {
-        color: darkred;
-    }
-`;
-
 type PostItemProps = {
     post: Post;
     completePost: (_id: string) => void;
 };
 
 const PostItem: React.FC<PostItemProps> = ({ post, completePost }) => {
-    const { publishedDate, tags, title, body, _id } = post;
-    const username = post.user.username;
+    const { publishedDate, deadlineDate, tags, title, body, _id } = post;
+    const [deadlineString, setDeadlineString] = useState('')
+    const user = post.user;
     const [init, setInit] = useState(false);
-    
+    const [timeState, setTimeState] = useState('');
+   
     useEffect(() => {
         setTimeout(() => {
             setInit(true);
         }, 250);
+        // displayDate(new Date(deadlineDate))
+        console.log(title)
+        setDeadlineString(displayDate(new Date(deadlineDate)))
     }, []);
+
+    const displayDate = (date: Date) => {
+        const now = new Date();
+        const daysOfWeekShort = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    
+        const dayDifference = Math.floor((date.getTime() - now.getTime()) / (1000 * 3600 * 24));
+        if (dayDifference < 0) {
+            setTimeState('past');
+            return 'Past';
+        } else if (dayDifference === 0) {
+            setTimeState('today');
+            return date.toLocaleTimeString('en-US', {
+                hour: 'numeric',
+                minute: 'numeric',
+                hour12: true
+            });
+        } else if (dayDifference < 7) {
+            setTimeState('week')
+            const dayOfWeek = daysOfWeekShort[date.getDay()];
+            return `${dayOfWeek}`;
+        } else {
+            setTimeState('later')
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const day = date.getDate().toString().padStart(2, '0');
+            return `${month}-${day}`;
+        }
+    };
+
+    
     
     return (
         <div className="post-block">
             <div className={`liner ${init ? 'init' : ''}`}></div>
 
             <div className="post-deadline">
-                <b>15 Sep</b>
+                <b>{deadlineString}</b>
             </div>
 
             <div className="post-content">
-                <h3>Portfolio Website</h3>
+                <h3>{title}</h3>
                 <div>#webdev #work</div>
-                <p>
-                    I have to finish my portfolio before getting back to Canada
-                    so that I can start applying right away once school term
-                    begins
-                </p>
+                <p>{body}</p>
             </div>
 
-            <div className="post-owner">img</div>
+            <div className="post-owner">
+                <img src={user.imgURL} alt="" />
+            </div>
         </div>
-
-        // <div className="post-block">
-        //     <h2>
-        //         <Link to={`/@${username}/${_id}`}>{title}</Link>
-        //     </h2>
-        //     <SubInfo
-        //         username={username}
-        //         publishedDate={new Date(publishedDate)}
-        //     />
-        //     <Tags tags={tags} />
-        //     <p>{body}</p>
-        //     {user && user.username === username ? (
-        //         <CompletedButton onClick={() => completePost(_id)}>
-        //             Complete
-        //         </CompletedButton>
-        //     ) : (
-        //         <></>
-        //     )}
-        // </div>
     );
 };
 

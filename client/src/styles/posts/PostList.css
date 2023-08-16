@@ -108,6 +108,16 @@
 }
 .postlist-block .post-block .post-owner {
   flex: 0 0 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.postlist-block .post-block .post-owner img {
+  width: 2em;
+  height: 2em;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border-radius: 50%;
 }
 .postlist-block .post-block:first-child {
   margin-top: 0.25rem;

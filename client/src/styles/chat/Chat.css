@@ -71,33 +71,43 @@
   height: 15%;
   display: flex;
 }
-.chat-block .textarea-block .textarea-container {
+.chat-block .textarea-block .textarea-section {
   width: 80%;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.chat-block .textarea-block .textarea-container .textarea {
-  outline: none;
+.chat-block .textarea-block .textarea-section .textarea-container {
   border: solid 1px #000;
   border-radius: 12px;
   padding: 10px 6px;
   font-size: 1rem;
-  min-height: 1em;
+  min-height: 44px;
   max-height: 5em;
   width: 380px;
   overflow-y: scroll;
   -ms-overflow-style: none;
   scrollbar-width: none;
+  text-align: start;
 }
-.chat-block .textarea-block .textarea-container .textarea::-webkit-scrollbar {
+.chat-block .textarea-block .textarea-section .textarea-container::-webkit-scrollbar {
   display: none;
 }
-.chat-block .textarea-block .textarea-container .textarea > * {
+.chat-block .textarea-block .textarea-section .textarea-container:hover {
+  cursor: text;
+}
+.chat-block .textarea-block .textarea-section .textarea-container div {
+  outline: none;
   display: inline;
+}
+.chat-block .textarea-block .textarea-section .textarea-container .title,
+.chat-block .textarea-block .textarea-section .textarea-container .body,
+.chat-block .textarea-block .textarea-section .textarea-container .deadline {
   border: 1px solid black;
-  margin-right: 5px;
+  border-radius: 5px;
+  padding: 0 4px;
+  margin-left: 4px;
 }
 .chat-block .textarea-block .send-container {
   width: 20%;

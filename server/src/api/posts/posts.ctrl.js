@@ -3,6 +3,8 @@ import mongoose from 'mongoose';
 import sanitizeHtml from 'sanitize-html';
 import Joi from 'joi';
 import Group from '../../models/group.js';
+import User from '../../models/user.js';
+import * as chrono from 'chrono-node'
 
 const { ObjectId } = mongoose.Types;
 
@@ -73,25 +75,37 @@ export const getPostById = async (req, res, next) => {
 
 export const write = async (req, res) => {
     const schema = Joi.object().keys({
-        // 객체가 다음 필드를 가지고 있음을 검증
-        title: Joi.string().required(), // required() 가 있으면 필수 항목
+        title: Joi.string().required(), 
+        tags: Joi.string(),
         body: Joi.string().required(),
-        // tags: Joi.array().items(Joi.string()), // 문자열로 이루어진 배열
+        deadline: Joi.string(),
+        // deadline: Joi.string().required(),
+        // tags: Joi.array().items(Joi.string()), 
     });
     const result = schema.validate(req.body);
+    
     if (result.error) {
+        console.log(req.body)
         res.status(400).send(result.error);
         return;
     }
 
     const { title, body, tags } = req.body;
-
+    console.log(req.body.deadline)
+    const deadline = chrono.parseDate(req.body.deadline);
+    console.log(deadline)
+    const { username } = res.locals.user;
+    const user = await User.findByUsername(username);
     try {
         const newPost = new Post({
             title,
             body,
             tags,
-            user: res.locals.user,
+            deadlineDate: deadline,
+            user: {
+                ...res.locals.user,
+                imgURL: user.imgURL,
+            }
         });
         
         const { groupID } = req.params;
