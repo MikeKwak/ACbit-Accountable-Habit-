@@ -25,7 +25,6 @@
   display: flex;
   gap: 10px;
   margin-bottom: 5px;
-  border: 1px solid black;
 }
 .chat-block .messages-block .message-block .message-profile {
   width: 2em;
@@ -81,7 +80,6 @@
 }
 .chat-block .textarea-block .textarea-container .textarea {
   outline: none;
-  display: inline-block;
   border: solid 1px #000;
   border-radius: 12px;
   padding: 10px 6px;
@@ -95,6 +93,11 @@
 }
 .chat-block .textarea-block .textarea-container .textarea::-webkit-scrollbar {
   display: none;
+}
+.chat-block .textarea-block .textarea-container .textarea > * {
+  display: inline;
+  border: 1px solid black;
+  margin-right: 5px;
 }
 .chat-block .textarea-block .send-container {
   width: 20%;

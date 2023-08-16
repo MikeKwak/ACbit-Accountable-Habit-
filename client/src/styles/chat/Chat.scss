@@ -28,7 +28,7 @@
             display: flex;
             gap: 10px;
             margin-bottom: 5px;
-            border: 1px solid black;
+            // border: 1px solid black;
 
             .message-profile {
                 width: 2em;
@@ -97,7 +97,6 @@
 
             .textarea {
                 outline: none;
-                display: inline-block;
                 border: solid 1px #000;
                 border-radius: 12px;
                 padding: 10px 6px;
@@ -105,6 +104,8 @@
                 min-height: 1em;
                 max-height: 5em;
                 width: 380px;
+
+                // display: flex;
 
                 overflow-y: scroll;
 
@@ -114,6 +115,12 @@
         
                 -ms-overflow-style: none;
                 scrollbar-width: none;
+
+                > * {
+                    display: inline;
+                    border: 1px solid black;
+                    margin-right: 5px;
+                }
             }
         }
 
