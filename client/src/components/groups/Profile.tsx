@@ -5,7 +5,7 @@ import AddImage from '../../img/addImage.jpg';
 import palette from '../../lib/styles/palette';
 import { User, UserContext } from '../../contexts/UserContext';
 import * as profileAPI from '../../lib/api/profile';
-import '../../styles/GroupPage.scss';
+import '../../styles/groups/GroupPage.scss';
 
 const ProfilePictureUpload = () => {
     const { user, setUser } = useContext(UserContext);

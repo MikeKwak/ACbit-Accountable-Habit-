@@ -1,25 +1,27 @@
-/* MonthlyCalendar.css */
+@import '../../lib/styles/palette.scss';
+// map-get(map-get($palette, gray), '4')
 
-/* Low number of tasks completed */
-.low {
-    background-color: #f2f2f2; /* Light gray */
+.cyan0 {
+    background-color: rgb(245, 245, 245);
 }
-
-/* Medium number of tasks completed */
-.medium {
-    background-color: #87ceeb; /* Sky blue */
+.cyan1 {
+    background-color: map-get(map-get($palette, cyan), '3'); 
 }
-
-/* High number of tasks completed */
-.high {
-    background-color: #3cb371; /* Medium sea green */
+.cyan2 {
+    background-color: map-get(map-get($palette, cyan), '4'); 
+}.cyan3 {
+    background-color: map-get(map-get($palette, cyan), '5'); 
+}.cyan4 {
+    background-color: map-get(map-get($palette, cyan), '6'); 
+}.cyan5 {
+    background-color: map-get(map-get($palette, cyan), '7'); 
+}.cyan6 {
+    background-color: map-get(map-get($palette, cyan), '8'); 
 }
-
 /* Custom styles for the calendar container */
 .calendar-container {
     margin: 0 auto;
     text-align: center;
-    // padding: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);

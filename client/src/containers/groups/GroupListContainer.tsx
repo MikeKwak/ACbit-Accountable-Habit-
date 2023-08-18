@@ -4,8 +4,7 @@ import * as groupAPI from '../../lib/api/groups';
 import { AxiosResponse } from 'axios';
 import GroupForm from '../../components/groups/GroupForm';
 import Profile from '../../components/groups/Profile';
-import { styled } from 'styled-components';
-import '../../styles/GroupPage.scss';
+import '../../styles/groups/GroupPage.scss';
 
 export type Group = {
     groupID: string;

@@ -64,9 +64,23 @@ GroupSchema.methods.removeMember = async function (username) {
     await this.save();
 }
 
-GroupSchema.methods.addPost = function (post) {
+GroupSchema.methods.addPost = async function (post) {
+    
     this.posts.push(post);
+    await this.save()
+   
+    
+   
 };
+
+GroupSchema.methods.completePost = async function(id) {
+    const postIndex = this.posts.findIndex(post => post._id.toString() === id);
+    
+    if (postIndex !== -1) {
+        this.posts[postIndex].status = 'completed';
+        await this.save();
+    }
+}
 
 GroupSchema.methods.removePost = async function(id) {
     this.posts = this.posts.filter((post) => !post._id.equals(id))

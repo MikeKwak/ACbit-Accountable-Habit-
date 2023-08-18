@@ -8,29 +8,29 @@ import * as chrono from 'chrono-node'
 
 const { ObjectId } = mongoose.Types;
 
-const sanitizeOption = {
-    allowedTags: [
-        'h1',
-        'h2',
-        'b',
-        'i',
-        'u',
-        's',
-        'p',
-        'ul',
-        'ol',
-        'li',
-        'blockquote',
-        'a',
-        'img',
-    ],
-    allowedAttributes: {
-        a: ['href', 'name', 'target'],
-        img: ['src'],
-        li: ['class'],
-    },
-    allowedSchemes: ['data', 'http'],
-};
+// const sanitizeOption = {
+//     allowedTags: [
+//         'h1',
+//         'h2',
+//         'b',
+//         'i',
+//         'u',
+//         's',
+//         'p',
+//         'ul',
+//         'ol',
+//         'li',
+//         'blockquote',
+//         'a',
+//         'img',
+//     ],
+//     allowedAttributes: {
+//         a: ['href', 'name', 'target'],
+//         img: ['src'],
+//         li: ['class'],
+//     },
+//     allowedSchemes: ['data', 'http'],
+// };
 
 export const list = async (req, res) => {
     const { groupID } = req.params;
@@ -46,11 +46,8 @@ export const list = async (req, res) => {
         console.log(e);
         res.send(e);
     }
-
-    //send all Posts
 };
 
-//middleware
 export const getPostById = async (req, res, next) => {
     const { id } = req.params;
 
@@ -85,19 +82,20 @@ export const write = async (req, res) => {
     const result = schema.validate(req.body);
     
     if (result.error) {
+        console.log('error')
         console.log(req.body)
         res.status(400).send(result.error);
         return;
     }
+    
 
     const { title, body, tags } = req.body;
-    console.log(req.body.deadline)
     const deadline = chrono.parseDate(req.body.deadline);
-    console.log(deadline)
     const { username } = res.locals.user;
     const user = await User.findByUsername(username);
     try {
         const newPost = new Post({
+            status: 'upcoming',
             title,
             body,
             tags,
@@ -112,13 +110,64 @@ export const write = async (req, res) => {
         const group =  await Group.findByID(groupID);
         await group.addPost(newPost);
         await newPost.save();
-        await group.save();
-
+   
         res.send(newPost);
     } catch (e) {
+        console.log('fuck')
         res.status(500).send(e);
     }
 };
+
+export const complete = async (req, res) => {
+    const { groupID, id } = req.params;
+   
+    try {
+        const group =  await Group.findByID(groupID);
+        await group.completePost(id)
+
+        const { username } = res.locals.user;
+        const user = await User.findByUsername(username);
+
+        const currentDate = new Date();
+        const todayDate = new Date(
+            currentDate.getFullYear(),
+            currentDate.getMonth(),
+            currentDate.getDate(),
+        );
+
+        const updatedTaskData = user.taskData.map((task) => {
+            const taskDate = new Date(task.date);
+
+            if (taskDate.getTime() === todayDate.getTime()) {
+                return {
+                    ...task,
+                    tasksCompleted: task.tasksCompleted + 1,
+                };
+            }
+
+            return task;
+        });
+
+        const taskExistsForToday = updatedTaskData.some(
+            (task) => new Date(task.date).getTime() === todayDate.getTime(),
+        );
+
+        if (!taskExistsForToday) {
+            updatedTaskData.push({
+                date: todayDate,
+                tasksCompleted: 1,
+            });
+        }
+
+        user.taskData = updatedTaskData;
+        await user.save();
+
+        res.send(group.posts);
+    }catch (e) {
+        console.log('fuck')
+        res.status(500).send(e);
+    }
+}
 
 const removeHtmlAndShorten = (body) => {
     const filtered = sanitizeHtml(body, {

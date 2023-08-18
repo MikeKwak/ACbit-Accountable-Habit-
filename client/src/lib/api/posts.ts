@@ -11,5 +11,8 @@ export const create = (
         formData,
     );
 
-export const complete = (groupID: string, _id: string): Promise<void> =>
-    client.delete<string, void>(`/api/posts/${groupID}/${_id}`);
+export const complete = (groupID: string, _id: string): Promise<AxiosResponse<Post[]>> =>
+    client.patch<void, AxiosResponse<Post[]>>(`/api/posts/${groupID}/${_id}`);
+
+export const remove = (groupID: string, _id: string): Promise<void> =>
+client.delete<void, void>(`/api/posts/${groupID}/${_id}`);

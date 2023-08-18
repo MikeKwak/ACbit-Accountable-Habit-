@@ -1,13 +1,10 @@
-import { useContext } from 'react';
 import { styled } from 'styled-components';
 import Responsive from './Responsive';
 import Button from './Button';
-import palette from '../../lib/styles/palette';
 import { Link, useParams } from 'react-router-dom';
 import { User } from '../../contexts/UserContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMessage } from '@fortawesome/free-solid-svg-icons';
-import { GroupContext } from '../../contexts/GroupContext';
 
 const HeaderBlock = styled.div`
     position: fixed;

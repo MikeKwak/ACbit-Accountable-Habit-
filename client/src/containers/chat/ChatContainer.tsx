@@ -3,6 +3,11 @@ import { useParams } from 'react-router-dom';
 import io, { Socket } from 'socket.io-client';
 import Chat from '../../components/chat/Chat';
 import { UserContext } from '../../contexts/UserContext';
+import { PostsContext } from '../../contexts/PostsContext';
+import { Post, PostFormData } from '../posts/PostListContainer';
+import * as postAPI from '../../lib/api/posts';
+import { AxiosResponse } from 'axios';
+
 
 export type Message = {
     message: String;
@@ -13,6 +18,7 @@ export type Message = {
 
 const ChatContainer = () => {
     const { user } = useContext(UserContext);
+    const { setPosts } = useContext(PostsContext);
     const { groupID } = useParams();
     const [messages, setMessages] = useState<Message[]>([]);
     const socket = useRef<Socket | null>(null);
@@ -59,8 +65,20 @@ const ChatContainer = () => {
         socket.current!.emit('send_message', { message, username: user!.username, groupID, createdTime })
     } 
 
+    const createPost = (formData: PostFormData) => {
+        postAPI
+            .create(groupID!, formData)
+            .then((res: AxiosResponse<Post>) => {
+                setPosts((prevPosts) => [...prevPosts, res.data]);
+                
+            })
+            .catch((error) => {
+                console.error('Error fetching groups:', error);
+            });
+    };
+
     return(
-        <Chat socket={socket.current!} messages={messages} sendMessage={sendMessage} />
+        <Chat socket={socket.current!} messages={messages} sendMessage={sendMessage} createPost={createPost}/>
     )
 };
 

@@ -1,17 +1,29 @@
-/* MonthlyCalendar.css */
-/* Low number of tasks completed */
-.low {
-  background-color: #f2f2f2; /* Light gray */
+.cyan0 {
+  background-color: rgb(245, 245, 245);
 }
 
-/* Medium number of tasks completed */
-.medium {
-  background-color: #87ceeb; /* Sky blue */
+.cyan1 {
+  background-color: #99e9f2;
 }
 
-/* High number of tasks completed */
-.high {
-  background-color: #3cb371; /* Medium sea green */
+.cyan2 {
+  background-color: #66d9e8;
+}
+
+.cyan3 {
+  background-color: #3bc9db;
+}
+
+.cyan4 {
+  background-color: #22b8cf;
+}
+
+.cyan5 {
+  background-color: #15aabf;
+}
+
+.cyan6 {
+  background-color: #1098ad;
 }
 
 /* Custom styles for the calendar container */

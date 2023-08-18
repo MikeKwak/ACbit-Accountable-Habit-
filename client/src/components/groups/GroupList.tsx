@@ -1,12 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
-import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Group } from '../../containers/groups/GroupListContainer';
 import { UserContext } from '../../contexts/UserContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
-import '../../styles/GroupPage.scss';
+import '../../styles/groups/GroupPage.scss';
 
 
 type GroupItemProps = {
@@ -49,17 +48,6 @@ const GroupItem: React.FC<GroupItemProps> = ({ group, deleteGroup }) => {
             </Link>
             <div className="controller">Controller</div>
         </div>
-
-        // <GroupItemBlock>
-        //     <GroupLink
-        //         to={`/${username}/${groupID}`}
-        //     >
-        //         {name}
-        //     </GroupLink>
-        //     <DeleteButton onClick={() => {deleteGroup(groupID)}}>
-        //         <FontAwesomeIcon icon={faTrashAlt} />
-        //     </DeleteButton>
-        // </GroupItemBlock>
     );
 };
 

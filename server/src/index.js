@@ -60,10 +60,8 @@ io.on('connection', (socket) => {
     });
 
     socket.on('send_message', async (msg) => {
-        console.log(msg);
-        console.log(socket.id);
         const { message, username, groupID, createdTime } = msg;
-        socket.join(groupID);
+        // socket.join(groupID);
         io.to(groupID).emit('receive_message', msg);
 
         const newMessage = new Chat({

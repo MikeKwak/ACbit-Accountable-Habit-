@@ -3,19 +3,21 @@ import Button from '../common/Button';
 import '../../styles/chat/Chat.css';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { PostFormData } from '../../containers/posts/PostListContainer';
+import { Post, PostFormData } from '../../containers/posts/PostListContainer';
 
 type SendMessageProps = {
     sendMessage: (message: string) => void;
+    createPost: (formData: PostFormData) => void;
+
 };
 
-const SendMessage: React.FC<SendMessageProps> = ({ sendMessage }) => {
+const SendMessage: React.FC<SendMessageProps> = ({ sendMessage, createPost }) => {
     const [message, setMessage] = useState('');
 
     const [todo, setTodo] = useState(false);
-    const [title, setTitle] = useState<string | null>(null);
-    const [body, setBody] = useState<string | null>(null);
-    const [deadline, setDeadline] = useState<string | null>(null);
+    // const [title, setTitle] = useState<string | null>(null);
+    // const [body, setBody] = useState<string | null>(null);
+    // const [deadline, setDeadline] = useState<string | null>(null);
 
     const inputRef = useRef<HTMLInputElement | null>(null);
     const titleRef = useRef<HTMLInputElement | null>(null);
@@ -82,7 +84,7 @@ const SendMessage: React.FC<SendMessageProps> = ({ sendMessage }) => {
                 //API call for creating Todo
                 createPost({
                     title: titleRef.current!.innerText,
-                    tags: '', // You need to set the tags value here
+                    tags: 'tags', // You need to set the tags value here
                     body: bodyRef.current!.innerText,
                     deadline: deadlineRef.current!.innerText,
                 });
@@ -132,17 +134,6 @@ const SendMessage: React.FC<SendMessageProps> = ({ sendMessage }) => {
         sendMessage(message);
         setMessage('');
         inputRef.current!.innerText = '';
-    };
-
-    const createPost = (formData: PostFormData) => {
-        postAPI
-            .create(groupID!, formData)
-            .then((res: AxiosResponse<Post>) => {
-                setPosts((prevPosts) => [...prevPosts, res.data]);
-            })
-            .catch((error) => {
-                console.error('Error fetching groups:', error);
-            });
     };
 
     return (

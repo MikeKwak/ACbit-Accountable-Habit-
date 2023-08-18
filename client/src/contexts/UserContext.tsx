@@ -3,11 +3,15 @@ import { createContext, useEffect, useState } from 'react';
 export type User = {
     _id: string;
     username: string;
-    imgURL?: string
+    imgURL?: string;
     groups?: {
         _id: string;
         name: string;
     }[];
+    taskData: {
+        date: Date;
+        tasksCompleted: number;
+    }[]
 };
 
 // Create the context with an initial value of null

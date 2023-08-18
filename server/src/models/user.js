@@ -19,6 +19,15 @@ const UserSchema = new Schema({
         ],
         default: [],
     },
+    taskData: {
+        type: [
+            {
+                date: Date,
+                tasksCompleted: Number,
+            }
+        ],
+        default: [],
+    }
 });
 
 UserSchema.methods.setPassword = async function (password) {

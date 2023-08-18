@@ -3,7 +3,11 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const PostSchema = new Schema({
-    status: String,
+    status: {
+        type: String,
+        enum: ['upcoming', 'completed'],
+        required: true,
+    },
     title: String,
     body: String,
     tags: {

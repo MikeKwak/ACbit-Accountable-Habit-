@@ -3,7 +3,7 @@
   width: 100%;
   height: 100%;
   overflow: hidden scroll;
-  background-color: #ededed;
+  background-color: #dee2e6;
   padding: 15px;
 }
 .postlist-block .postlist-header {
@@ -108,9 +108,16 @@
 }
 .postlist-block .post-block .post-owner {
   flex: 0 0 45px;
+  padding: 1rem;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+}
+.postlist-block .post-block .post-owner svg {
+  cursor: pointer;
+  z-index: 10;
+  height: 1.5em;
 }
 .postlist-block .post-block .post-owner img {
   width: 2em;

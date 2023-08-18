@@ -36,8 +36,10 @@
 .chat-block .messages-block .message-block .message-info {
   display: flex;
   flex-direction: column-reverse;
+  align-items: center;
   color: gray;
   font-weight: 300;
+  font-size: small;
 }
 .chat-block .messages-block .message-block .message-content {
   max-width: 80%;
@@ -57,6 +59,7 @@
   border-radius: 0px 10px 10px 10px;
   max-width: -moz-max-content;
   max-width: max-content;
+  word-wrap: break-word;
 }
 .chat-block .messages-block .message-block.owner {
   align-self: flex-end;
