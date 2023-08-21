@@ -105,13 +105,21 @@
   display: flex;
   border-radius: 5px;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   width: 70%;
   margin: auto;
   height: 30px;
   margin-top: -30px;
   background-color: #ddd;
   transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+.grid-container .column2 .groupList-block .card .controller img {
+  width: 1.5em;
+  height: 1.5em;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border-radius: 50%;
+  margin-left: 5px;
 }
 
 .profile-block {

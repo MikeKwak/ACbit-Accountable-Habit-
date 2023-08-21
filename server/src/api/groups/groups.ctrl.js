@@ -4,7 +4,19 @@ import User from '../../models/user.js';
 
 export const list = async (req, res) => {
     const user = await User.findByUsername(res.locals.user.username);
-    res.send(user.groups);
+    const groupInfoPromises = user.groups.map(async (group) => {
+        const groupDocument = await Group.findByID(group.groupID);
+        const groupInfo = {
+            groupID: groupDocument.groupID,
+            name: groupDocument.name,
+            users: groupDocument.users,
+        };
+        return groupInfo;
+    });
+
+    const groupInfos = await Promise.all(groupInfoPromises);
+
+    res.send(groupInfos);
 };
 
 export const create = async (req, res) => {
@@ -21,23 +33,26 @@ export const create = async (req, res) => {
     const { name, password } = req.body;
 
     try {
+        const user = await User.findByUsername(res.locals.user.username);
         const group = new Group({
             name,
         });
-        console.log(res.locals.user);
-        await group.addMember(res.locals.user);
+        await group.addMember({ ...res.locals.user, imgURL: user.imgURL });
         await group.setGroupID();
         await group.setPassword(password);
         await group.save();
 
-        const user = await User.findByUsername(res.locals.user.username);
         user.addGroup({
             groupID: group.groupID,
             name: group.name,
         });
         await user.save();
 
-        res.send(group.serialize());
+        res.send({
+            name: group.name,
+            groupID: group.groupID,
+            users: group.users,
+        });
     } catch (e) {
         res.status(500).send(e);
     }
@@ -72,7 +87,7 @@ export const join = async (req, res) => {
             return;
         }
 
-        await group.addMember(res.locals.user);
+        await group.addMember({ ...res.locals.user, imgURL: user.imgURL });
         await group.save();
 
         await user.addGroup({
@@ -81,7 +96,11 @@ export const join = async (req, res) => {
         });
         await user.save(user.groups);
 
-        res.send(group);
+        res.send({
+            name: group.name,
+            groupID: group.groupID,
+            users: group.users,
+        });
     } catch (e) {
         res.status(500).send(e);
     }
@@ -90,22 +109,28 @@ export const join = async (req, res) => {
 export const leave = async (req, res) => {
     const { groupID } = req.body;
     const user = await User.findByUsername(res.locals.user.username);
-    
-    try{
+
+    try {
         await user.leaveGroup(groupID);
     } catch {
-        console.log("error leaveGroup")
+        console.log('error leaveGroup');
     }
 
     const group = await Group.findByID(groupID);
-   
-    
+
     if (group.users.length === 1) {
-        await Group.deleteOne({ groupID: groupID })
+        await Group.deleteOne({ groupID: groupID });
         // await Group.save()
     } else {
         await group.removeMember(user.username);
-        await group.save()
+        await group.save();
     }
-    res.send(user.groups)
+    res.send(user.groups);
+};
+
+export const get = async (req, res) => {
+    const { groupID } = req.params;
+    const group = await Group.findByID(groupID);
+    
+    res.send(group.serialize());
 }

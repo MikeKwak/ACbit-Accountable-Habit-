@@ -10,13 +10,18 @@ type ChatProps = {
     messages: Message[];
     sendMessage: (message: string) => void;
     createPost: (formData: PostFormData) => void;
+    users: {
+        username: string;
+        imgURL: string;
+    }[];
+
 }
 
-const Chat: React.FC<ChatProps> = ({ socket, messages, sendMessage, createPost }) => {
+const Chat: React.FC<ChatProps> = ({ socket, messages, users, sendMessage, createPost }) => {
 
     return (
         <div className='chat-block'>
-            <Messages messages={messages}/>
+            <Messages messages={messages} users={users} />
             <SendMessage
                 sendMessage={sendMessage}
                 createPost={createPost}

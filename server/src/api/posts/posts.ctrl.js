@@ -1,4 +1,4 @@
-import Post from '../../models/post.js';
+import { PostSchema} from '../../models/post.js';
 import mongoose from 'mongoose';
 import sanitizeHtml from 'sanitize-html';
 import Joi from 'joi';
@@ -49,7 +49,7 @@ export const list = async (req, res) => {
 };
 
 export const getPostById = async (req, res, next) => {
-    const { id } = req.params;
+    const { id, groupID } = req.params;
 
     //check if id is a vlid ObjectId
     if (!ObjectId.isValid(id)) {
@@ -58,7 +58,8 @@ export const getPostById = async (req, res, next) => {
     }
 
     try {
-        const post = await Post.findById(id);
+        const group = await Group.findOne({ groupID: groupID })
+        const post = group.posts.find(post => post._id.toString() === id);
         if (!post) {
             res.sendStatus(404);
             return;
@@ -94,7 +95,7 @@ export const write = async (req, res) => {
     const { username } = res.locals.user;
     const user = await User.findByUsername(username);
     try {
-        const newPost = new Post({
+        const newPost = {
             status: 'upcoming',
             title,
             body,
@@ -104,12 +105,12 @@ export const write = async (req, res) => {
                 ...res.locals.user,
                 imgURL: user.imgURL,
             }
-        });
+        };
         
         const { groupID } = req.params;
         const group =  await Group.findByID(groupID);
         await group.addPost(newPost);
-        await newPost.save();
+        // await newPost.save();
    
         res.send(newPost);
     } catch (e) {

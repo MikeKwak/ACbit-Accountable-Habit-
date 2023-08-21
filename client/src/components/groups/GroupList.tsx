@@ -1,24 +1,24 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Group } from '../../containers/groups/GroupListContainer';
+import { GroupInfo } from '../../containers/groups/GroupListContainer';
 import { UserContext } from '../../contexts/UserContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import defaultPicture from '../../img/default.png';
 
 import '../../styles/groups/GroupPage.scss';
 
-
 type GroupItemProps = {
-    group: Group;
+    group: GroupInfo;
     deleteGroup: (id: string) => void;
 };
 
 const GroupItem: React.FC<GroupItemProps> = ({ group, deleteGroup }) => {
     const { user } = useContext(UserContext);
-    const { name, groupID } = group;
+    const { name, groupID, users } = group;
     const [init, setInit] = useState(false);
-
-    console.log(user);
+    console.log(group);
+    console.log(users);
     const username = user?.username;
 
     useEffect(() => {
@@ -46,13 +46,20 @@ const GroupItem: React.FC<GroupItemProps> = ({ group, deleteGroup }) => {
                     </div>
                 </div>
             </Link>
-            <div className="controller">Controller</div>
+            <div className="controller">
+                {users.map((user) => (
+                    <img
+                        src={user.imgURL ? user.imgURL : defaultPicture}
+                        alt="profile"
+                    />
+                ))}
+            </div>
         </div>
     );
 };
 
 type GroupListProps = {
-    groups: Group[];
+    groups: GroupInfo[];
     loading: boolean;
     deleteGroup: (id: string) => void;
 };

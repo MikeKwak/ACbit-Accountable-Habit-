@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
-import Post from './post.js';
+import { PostSchema } from './post.js'
 
 const { Schema } = mongoose;
 
@@ -8,12 +8,16 @@ const GroupSchema = new Schema({
     name: String,
     groupID: String,
     hashedPassword: String,
-    posts: [Post.schema],
+    posts: {
+        type: [PostSchema],
+        default: [],
+    },
     users: {
         type: [
             {
                 _id: mongoose.Types.ObjectId,
                 username: String,
+                imgURL: String,
             },
         ],
         default: [],
@@ -65,12 +69,8 @@ GroupSchema.methods.removeMember = async function (username) {
 }
 
 GroupSchema.methods.addPost = async function (post) {
-    
     this.posts.push(post);
     await this.save()
-   
-    
-   
 };
 
 GroupSchema.methods.completePost = async function(id) {
@@ -95,6 +95,10 @@ GroupSchema.methods.serialize = function () {
 
 GroupSchema.statics.findByID = async function (id) {
     return await this.findOne({ groupID : id });
+};
+
+GroupSchema.statics.findGroupsByUsername = async function (username) {
+    return await this.find({ 'users.username': username });
 };
 
 // GroupSchema.statics.removeGroupByID = async function (id) {

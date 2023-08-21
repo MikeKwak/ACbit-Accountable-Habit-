@@ -1,3 +1,4 @@
+import Group from '../../models/group.js';
 import User from '../../models/user.js';
 
 //reduce img size
@@ -11,7 +12,17 @@ export const uploadImage = async (req, res) => {
     }
     user.imgURL = imgURL;
     await user.save();
-    console.log(user)
+
+    const groups = await Group.findGroupsByUsername(user.username)
+    groups.map(async (group) => {
+        group.users.map((groupUser) => {
+            if (groupUser.username === user.username) {
+                groupUser.imgURL = imgURL;
+            }
+        });
+        await group.save();
+    })
+
     res.send();
 };
 

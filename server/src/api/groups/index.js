@@ -9,6 +9,6 @@ groups.get('/', checkLoggedIn, groupsCtrl.list)
 groups.post('/create', checkLoggedIn, groupsCtrl.create)
 groups.post('/join', checkLoggedIn, groupsCtrl.join)
 groups.post('/leave', groupsCtrl.leave)
-
+groups.get('/:groupID', groupsCtrl.get)
 
 export default groups;

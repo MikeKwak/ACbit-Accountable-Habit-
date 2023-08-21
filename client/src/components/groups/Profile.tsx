@@ -52,7 +52,11 @@ const ProfilePictureUpload = () => {
     );
 };
 
-const Profile = () => {
+type ProfileProps = {
+    uploadImage: (imgURL: string) => void;
+}
+
+const Profile: React.FC<ProfileProps> = ({ uploadImage }) => {
     const { user } = useContext(UserContext);
 
     return (

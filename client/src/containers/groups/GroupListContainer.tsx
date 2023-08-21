@@ -3,12 +3,16 @@ import GroupList from '../../components/groups/GroupList';
 import * as groupAPI from '../../lib/api/groups';
 import { AxiosResponse } from 'axios';
 import GroupForm from '../../components/groups/GroupForm';
-import Profile from '../../components/groups/Profile';
 import '../../styles/groups/GroupPage.scss';
+import ProfileContainer from '../common/ProfileContainer';
 
-export type Group = {
+export type GroupInfo = {
     groupID: string;
     name: string;
+    users: {
+        username: string;
+        imgURL: string;
+    }[];
 };
 
 export type CreateFormData = {
@@ -22,7 +26,7 @@ export type JoinFormData = {
 };
 
 const GroupListContainer: React.FC = () => {
-    const [groups, setGroups] = useState<Group[]>([]);
+    const [groups, setGroups] = useState<GroupInfo[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
@@ -32,7 +36,7 @@ const GroupListContainer: React.FC = () => {
             .leave(id)
             .then(() =>
                 setGroups(
-                    groups.filter((group: Group) => group.groupID !== id),
+                    groups.filter((group: GroupInfo) => group.groupID !== id),
                 ),
             )
             .catch((e) => console.log(e));
@@ -44,16 +48,11 @@ const GroupListContainer: React.FC = () => {
             setError('Missing Field');
             return;
         }
-
         //API call
         groupAPI
             .create(formData)
-            .then((res: AxiosResponse<Group>) => {
-                const newGroup: Group = {
-                    name: res.data.name,
-                    groupID: res.data.groupID,
-                };
-                setGroups((prevData) => [...prevData, newGroup]);
+            .then((res: AxiosResponse<GroupInfo>) => {
+                setGroups((prevData) => [...prevData, res.data]);
             })
             .catch((error) => {
                 console.error('Error fetching groups:', error);
@@ -61,17 +60,15 @@ const GroupListContainer: React.FC = () => {
     };
 
     const joinGroup = (formData: JoinFormData) => {
-
         if (!formData.groupID || !formData.password) {
             setError('Missing Field');
             return;
         }
-
         //API call
         groupAPI
             .join(formData)
-            .then((response) => {
-                setGroups((prevGroups) => [...prevGroups, response.data]);
+            .then((res: AxiosResponse<GroupInfo>) => {
+                setGroups((prevGroups) => [...prevGroups, res.data]);
             })
             .catch((error) => {
                 console.error('Error fetching groups:', error);
@@ -83,7 +80,7 @@ const GroupListContainer: React.FC = () => {
         //API call
         groupAPI
             .list()
-            .then((res: AxiosResponse<Group[]>) => {
+            .then((res: AxiosResponse<GroupInfo[]>) => {
                 setGroups(res.data);
                 setLoading(false);
             })
@@ -97,7 +94,7 @@ const GroupListContainer: React.FC = () => {
     return (
         <div className='grid-container'>
             <div className="column1">
-                <Profile />
+                <ProfileContainer />
                 <GroupForm
                     createGroup={createGroup}
                     joinGroup={joinGroup}

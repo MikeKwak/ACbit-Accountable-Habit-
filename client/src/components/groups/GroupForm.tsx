@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import Button from '../common/Button';
 import CreateForm from './CreateForm';
 import palette from '../../lib/styles/palette';
 import JoinForm from './JoinForm';

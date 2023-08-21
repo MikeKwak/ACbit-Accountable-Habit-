@@ -21,7 +21,7 @@
 
             display: flex;
             flex-direction: column;
-            
+
             .card {
                 margin-bottom: 10px;
                 z-index: 0;
@@ -54,17 +54,17 @@
                         opacity: 50%;
                         display: flex;
                         justify-content: center;
-                        
+
                         .icon {
                             transform: rotateZ(90deg);
                         }
 
-                        &:hover .icon{
+                        &:hover .icon {
                             transition: all 0.5s ease;
                             transform: rotateZ(0deg);
                         }
                     }
-                     
+
                     .delete-button {
                         transition: all 0.5s ease;
                         display: none;
@@ -72,15 +72,13 @@
                         bottom: -150%;
                         padding: 5px;
                         z-index: 10;
-                        
+
                         cursor: pointer;
                     }
 
                     .dropdown:hover .delete-button {
                         display: block;
                     }
-
-
 
                     .liner {
                         position: absolute;
@@ -97,7 +95,11 @@
                             left: -60%;
                             width: 40%;
                             height: 150%;
-                            background: linear-gradient(40deg, #0c8599, #15aabf);
+                            background: linear-gradient(
+                                40deg,
+                                #0c8599,
+                                #15aabf
+                            );
                             opacity: 80%;
                             transform: rotate(-6deg);
                             z-index: 9;
@@ -115,19 +117,28 @@
                 &:hover {
                     .controller {
                         margin-top: -5px;
+                        
                     }
                 }
                 .controller {
                     display: flex;
                     border-radius: 5px;
                     align-items: center;
-                    justify-content: center;
+                    justify-content: flex-start;
+                    
                     width: 70%;
                     margin: auto;
                     height: 30px;
                     margin-top: -30px;
                     background-color: #ddd;
                     transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+                    img {
+                            width: 1.5em;
+                            height: 1.5em;
+                            object-fit: cover;
+                            border-radius: 50%;
+                            margin-left: 5px;
+                        }
                 }
             }
         }

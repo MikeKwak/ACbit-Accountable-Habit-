@@ -10,13 +10,20 @@ import { AxiosResponse } from 'axios';
 
 
 export type Message = {
-    message: String;
-    groupID: String;
-    username: String;
+    message: string;
+    groupID: string;
+    username: string;
     createdTime: Date;
 };
 
-const ChatContainer = () => {
+type ChatContainerProps = {
+    users: {
+        username: string;
+        imgURL: string;
+    }[];
+}
+
+const ChatContainer:React.FC<ChatContainerProps> = ({ users }) => {
     const { user } = useContext(UserContext);
     const { setPosts } = useContext(PostsContext);
     const { groupID } = useParams();
@@ -78,7 +85,7 @@ const ChatContainer = () => {
     };
 
     return(
-        <Chat socket={socket.current!} messages={messages} sendMessage={sendMessage} createPost={createPost}/>
+        <Chat socket={socket.current!} users={users} messages={messages} sendMessage={sendMessage} createPost={createPost}/>
     )
 };
 

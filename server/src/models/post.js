@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const { Schema } = mongoose;
 
-const PostSchema = new Schema({
+export const PostSchema = new Schema({
     status: {
         type: String,
         enum: ['upcoming', 'completed'],
@@ -22,13 +22,6 @@ const PostSchema = new Schema({
     user: {
         _id: mongoose.Types.ObjectId,
         username: String,
-        imgURL: {
-            type: String,
-            default: null,
-        },
     },
 });
 
-//create model instance
-const Post = mongoose.model('Post', PostSchema);
-export default Post;
