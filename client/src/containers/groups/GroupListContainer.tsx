@@ -12,6 +12,7 @@ export type GroupInfo = {
     users: {
         username: string;
         imgURL: string;
+        _id: string;
     }[];
 };
 
@@ -26,7 +27,7 @@ export type JoinFormData = {
 };
 
 const GroupListContainer: React.FC = () => {
-    const [groups, setGroups] = useState<GroupInfo[]>([]);
+    const [groups, setGroups] = useState<GroupInfo[] | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
@@ -36,7 +37,7 @@ const GroupListContainer: React.FC = () => {
             .leave(id)
             .then(() =>
                 setGroups(
-                    groups.filter((group: GroupInfo) => group.groupID !== id),
+                    groups!.filter((group: GroupInfo) => group.groupID !== id),
                 ),
             )
             .catch((e) => console.log(e));
@@ -45,33 +46,45 @@ const GroupListContainer: React.FC = () => {
     const createGroup = (formData: CreateFormData) => {
         setError('');
         if (!formData.name || !formData.password) {
-            setError('Missing Field');
+            setError('Missing Field'); //bad request
             return;
         }
         //API call
         groupAPI
             .create(formData)
             .then((res: AxiosResponse<GroupInfo>) => {
-                setGroups((prevData) => [...prevData, res.data]);
+                setGroups((prevData) => [...prevData!, res.data]);
             })
-            .catch((error) => {
-                console.error('Error fetching groups:', error);
+            .catch((e) => {
+                if (e.response.status === 400) {
+                    if (e.response.data === '"name" length must be less than or equal to 20 characters long') {
+                        setError('name too long');
+                    } else if (e.response.data === '"password" length must be at least 8 characters long') {
+                        setError('password too short');
+                    }
+                }
             });
     };
 
     const joinGroup = (formData: JoinFormData) => {
         if (!formData.groupID || !formData.password) {
-            setError('Missing Field');
+            setError('Missing Field'); //bad request
             return;
         }
         //API call
         groupAPI
             .join(formData)
             .then((res: AxiosResponse<GroupInfo>) => {
-                setGroups((prevGroups) => [...prevGroups, res.data]);
+                setGroups((prevGroups) => [...prevGroups!, res.data]);
             })
-            .catch((error) => {
-                console.error('Error fetching groups:', error);
+            .catch((e) => {
+                if (e.response.status === 401) {
+                    setError('wrong groupID or password');
+                } else if (e.response.status === 404) {
+                    setError('No group with that id');
+                } else if (e.response.status === 409) {
+                    setError('already joined');
+                }
             });
     };
 
@@ -81,6 +94,7 @@ const GroupListContainer: React.FC = () => {
         groupAPI
             .list()
             .then((res: AxiosResponse<GroupInfo[]>) => {
+                console.log(res.data, "1")
                 setGroups(res.data);
                 setLoading(false);
             })
@@ -92,7 +106,7 @@ const GroupListContainer: React.FC = () => {
     }, []);
 
     return (
-        <div className='grid-container'>
+        <div className="grid-container">
             <div className="column1">
                 <ProfileContainer />
                 <GroupForm
@@ -102,11 +116,13 @@ const GroupListContainer: React.FC = () => {
                 />
             </div>
             <div className="column2">
-                <GroupList
-                    loading={loading}
-                    groups={groups}
-                    deleteGroup={deleteGroup}
-                />
+                {!loading && groups && (
+                    <GroupList
+                        loading={loading}
+                        groups={groups!}
+                        deleteGroup={deleteGroup}
+                    />
+                )}
             </div>
         </div>
     );

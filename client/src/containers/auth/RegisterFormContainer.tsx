@@ -36,12 +36,12 @@ const RegisterFormContainer = () => {
         const { username, password, passwordConfirm } = form;
 
         if ([username, password, passwordConfirm].includes('')) {
-            setError('Error: Missing Field');
+            setError('missing field');
             return;
         }
 
         if (password !== passwordConfirm) {
-            setError('Error: Passwords do not match');
+            setError('passwords do not match');
             setForm((prevForm) => ({
                 ...prevForm,
                 [password]: '',
@@ -60,9 +60,18 @@ const RegisterFormContainer = () => {
             })
             .catch((e) => {
                 if (e.response.status === 400) {
-                    setError('Username too long or short');
+                    console.log(e.response.data)
+                    if (e.response.data === '"username" length must be at least 3 characters long') {
+                        setError('username too short');
+                    } else if (e.response.data === '"username" length must be less than or equal to 20 characters long') {
+                        setError('username too long');
+                    } else if (e.response.data === '"password" length must be at least 8 characters long') {
+                        setError('password too short');
+                    } else {
+                        setError('password must include at least one character');
+                    }
                 } else if (e.response.status === 409) {
-                    setError('Username Taken');
+                    setError('username Taken');
                 } else if (e.response.status === 500) {
                     setError('Server Error : contact help');
                 }

@@ -6,7 +6,7 @@ const posts = express.Router();
 
 
 
-posts.get('/:groupID', postsCtrl.list);
+posts.get('/:groupID', checkLoggedIn, postsCtrl.list);
 posts.post('/:groupID', checkLoggedIn, postsCtrl.write);
 posts.patch('/:groupID/:id', checkLoggedIn, postsCtrl.getPostById, postsCtrl.checkOwnPost, postsCtrl.complete);
 posts.delete('/:groupID/:id', checkLoggedIn,  postsCtrl.getPostById, postsCtrl.checkOwnPost, postsCtrl.remove);

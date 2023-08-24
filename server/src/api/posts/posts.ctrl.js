@@ -37,13 +37,12 @@ export const list = async (req, res) => {
     try {
         const group = await Group.findByID(groupID);
         if (!group) {
+            console.log('here')
             res.sendStatus(404);
             return;
         }
-
         res.send(group.posts);
     } catch (e) {
-        console.log(e);
         res.send(e);
     }
 };
@@ -74,28 +73,29 @@ export const getPostById = async (req, res, next) => {
 export const write = async (req, res) => {
     const schema = Joi.object().keys({
         title: Joi.string().required(), 
-        tags: Joi.string(),
         body: Joi.string().required(),
         deadline: Joi.string(),
-        // deadline: Joi.string().required(),
-        // tags: Joi.array().items(Joi.string()), 
     });
     const result = schema.validate(req.body);
     
     if (result.error) {
         console.log('error')
-        console.log(req.body)
-        res.status(400).send(result.error);
+        res.status(400).send(result.error); //bad request
         return;
     }
     
 
     const { title, body, tags } = req.body;
     const deadline = chrono.parseDate(req.body.deadline);
+    if (!deadline) {
+        res.status(400).send('chrono-error'); //bad request
+        return;
+    }
     const { username } = res.locals.user;
     const user = await User.findByUsername(username);
     try {
         const newPost = {
+            // _id: mongoose.Types.ObjectId(), - not need as given when placed database
             status: 'upcoming',
             title,
             body,
@@ -112,7 +112,7 @@ export const write = async (req, res) => {
         await group.addPost(newPost);
         // await newPost.save();
    
-        res.send(newPost);
+        res.send(group.posts);
     } catch (e) {
         console.log('fuck')
         res.status(500).send(e);
@@ -223,7 +223,6 @@ export const read = async (req, res) => {
 export const remove = async (req, res) => {
     const { groupID, id } = req.params;
     try {
-        await Post.findByIdAndRemove(id).exec();
         const group =  await Group.findByID(groupID);
         await group.removePost(id);
         res.sendStatus(204);

@@ -7,6 +7,7 @@ import PostListContainer from '../posts/PostListContainer';
 import { useParams } from 'react-router-dom';
 import * as groupAPI from '../../lib/api/groups';
 import { AxiosResponse } from 'axios';
+import { Post } from '../posts/PostListContainer'
 
 const MainBlock = styled.div`
     display: flex;
@@ -28,17 +29,7 @@ const MainBlock = styled.div`
 export type Group = {
     groupID: string;
     name: string;
-    posts: {
-        status: string;
-        title: string;
-        body: string;
-        tags: string[];
-        publishedDate: Date;
-        deadlineDate: Date;
-        user: {
-            username: string;
-        };
-    };
+    posts: Post[];
     users: {
         username: string;
         imgURL: string;
@@ -49,7 +40,9 @@ export type Group = {
 const MainContainer = () => {
     const { groupID } = useParams();
     const [group, setGroup] = useState<Group | null>(null);
+
     const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string>('');
 
     useEffect(() => {
         groupAPI
@@ -58,14 +51,14 @@ const MainContainer = () => {
                 setGroup(res.data);
                 setLoading(false);
             })
-            .catch((error) => {
-                console.error('Error fetching group:', error);
+            .catch((e) => {
+                setError('Failed to get group data from the server')
             });
-    }, [group]);
+    }, [groupID]);
 
     return (
         <MainBlock>
-            {!loading && (
+            {(group && !loading) && (
                 <div className="main-grid-container">
                     <div className="grid profile-container">
                         <ProfileContainer />
@@ -73,14 +66,15 @@ const MainContainer = () => {
                     </div>
 
                     <div className="grid chat-container">
-                        <ChatContainer users={group!.users} />
+                        <ChatContainer group={group!} setGroup={setGroup} />
                     </div>
 
                     <div className="grid posts-container">
-                        <PostListContainer />
+                        <PostListContainer users={group.users} posts={group.posts} setGroup={setGroup} error={error} setError={setError} />
                     </div>
                 </div>
             )}
+            
         </MainBlock>
     );
 };

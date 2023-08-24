@@ -41,14 +41,12 @@ const LoginFormContainer = () => {
         //API call
         authAPI.login({ username, password })
             .then((res: AxiosResponse<User>) => {
-                console.log(res)
-                //set UserContext
                 setUser(res.data);
                 navigate(`/${username}/groups`);
             })
             .catch((e) => {
                 if (e.response.status === 401) {
-                    setError('Unathorized');
+                    setError('wrong username or password');
                 } else if (e.response.status === 500) {
                     setError('Server Error : contact help');
                 }

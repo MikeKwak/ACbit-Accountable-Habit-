@@ -20,32 +20,38 @@ type CreatePostModalProps = {
     isOpen: boolean;
     onRequestClose: React.Dispatch<React.SetStateAction<boolean>>;
     createPost: (formData: PostFormData) => void;
+    setError: React.Dispatch<React.SetStateAction<string>>;
 };
 
 const CreatePostModal: React.FC<CreatePostModalProps> = ({
     isOpen,
     onRequestClose,
     createPost,
+    setError,
 }) => {
     const [postForm, setPostForm] = useState<PostFormData>({
         title: '',
-        tags: '',
         body: '',
         deadline: '',
     });
 
     const handleCreate = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
+        if(postForm.title === '' || postForm.body === '' || postForm.deadline === '') {
+            setError('Missing Field');
+            setTimeout(() => {
+                setError('');
+            }, 3000)
+            return;
+        }
         createPost(postForm);
 
-        setPostForm({
-            title: '',
-            tags: '',
-            body: '',
-            deadline: '',
-        });
-        onRequestClose(false);
+            setPostForm({
+                title: '',
+                body: '',
+                deadline: '',
+            });
+            onRequestClose(false);
     };
 
     const handleChange = (
@@ -59,6 +65,7 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({
 
     return (
         <CreatePostBlock
+            ariaHideApp={false}
             isOpen={isOpen}
             onRequestClose={() => onRequestClose(false)}
         >
@@ -73,16 +80,6 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({
                         placeholder="title"
                         onChange={handleChange}
                         value={postForm.title}
-                    />
-                </div>
-                <div>
-                    <label>Tags:</label>
-                    <input
-                        autoComplete="tags"
-                        name="tags"
-                        placeholder="tags"
-                        onChange={handleChange}
-                        value={postForm.tags}
                     />
                 </div>
                 <div>

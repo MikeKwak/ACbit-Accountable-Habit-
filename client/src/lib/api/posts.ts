@@ -5,8 +5,8 @@ import client from './client';
 export const create = (
     groupID: string,
     formData: PostFormData,
-): Promise<AxiosResponse<Post>> =>
-    client.post<PostFormData, AxiosResponse<Post>>(
+): Promise<AxiosResponse<Post[]>> =>
+    client.post<PostFormData, AxiosResponse<Post[]>>(
         `/api/posts/${groupID}`,
         formData,
     );

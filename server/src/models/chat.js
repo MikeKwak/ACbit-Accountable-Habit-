@@ -13,9 +13,12 @@ const ChatSchema = new Schema({
 });
 
 ChatSchema.statics.getMessages = async function (groupID){
-        console.log(groupID)
     const messages = await this.find({ groupID }).exec();
     return messages;
+}
+
+ChatSchema.statics.deleteMessages = async function (groupID) {
+    this.deleteMany({ groupID: groupID });
 }
 
 const Chat = mongoose.model('Chat', ChatSchema);

@@ -1,31 +1,43 @@
 import Messages from './Messages';
-import SendMessage from './SendMessage';
-import { Socket } from 'socket.io-client';
-import '../../styles/chat/Chat.scss'
+import '../../styles/chat/Chat.scss';
 import { Message } from '../../containers/chat/ChatContainer';
 import { PostFormData } from '../../containers/posts/PostListContainer';
+import { Group } from '../../containers/main/MainContainer';
+import SendMessageContainer from '../../containers/chat/SendMessageContainer';
 
 type ChatProps = {
-    socket: Socket;
+    error: string;
     messages: Message[];
     sendMessage: (message: string) => void;
     createPost: (formData: PostFormData) => void;
-    users: {
-        username: string;
-        imgURL: string;
-    }[];
+    group: Group | null;
+};
 
-}
-
-const Chat: React.FC<ChatProps> = ({ socket, messages, users, sendMessage, createPost }) => {
+const Chat: React.FC<ChatProps> = ({
+    error,
+    messages,
+    group,
+    sendMessage,
+    createPost,
+}) => {
+    const { name, groupID, users } = group!;
 
     return (
-        <div className='chat-block'>
+        <div className="chat-block">
+            <div className="chat-header">
+                <h2>{name}</h2>
+                <p>{groupID}</p>
+            </div>
             <Messages messages={messages} users={users} />
-            <SendMessage
-                sendMessage={sendMessage}
-                createPost={createPost}
-            ></SendMessage>
+
+            {error ? (
+                <p>{error}</p>
+            ) : (
+                <SendMessageContainer
+                    sendMessage={sendMessage}
+                    createPost={createPost}
+                ></SendMessageContainer>
+            )}
         </div>
     );
 };

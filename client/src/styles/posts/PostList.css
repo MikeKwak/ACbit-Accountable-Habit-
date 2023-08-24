@@ -1,55 +1,76 @@
 .postlist-block {
   position: relative;
   width: 100%;
+  max-width: 500px;
   height: 100%;
   overflow: hidden scroll;
-  background-color: #dee2e6;
-  padding: 15px;
+  padding: 5px;
 }
 .postlist-block .postlist-header {
   display: flex;
   flex-direction: column;
   height: 100px;
-  padding-bottom: 0.5rem;
   background-color: white;
 }
-.postlist-block .postlist-header a {
+.postlist-block .postlist-header .postlist-status {
+  display: flex;
+  background-color: #f1f3f5;
+}
+.postlist-block .postlist-header .postlist-status a {
   display: flex;
   align-items: center;
   padding: 10px 20px;
+  cursor: pointer;
 }
-.postlist-block .postlist-header a img {
+.postlist-block .postlist-header .postlist-status a img {
   width: 20px;
   height: 20px;
   margin-right: 5px;
 }
-.postlist-block .postlist-header a.active {
+.postlist-block .postlist-header .postlist-status a.active {
   font-weight: 600;
   background-color: white;
 }
-.postlist-block .postlist-header .sort-by {
+.postlist-block .postlist-header .postlist-options {
+  display: flex;
+  margin: auto 0;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+.postlist-block .postlist-header .postlist-options .sort-by {
   display: flex;
   align-items: center;
   padding-left: 5px;
 }
-.postlist-block .postlist-header .sort-by p {
+.postlist-block .postlist-header .postlist-options .sort-by p {
   margin: 0;
 }
-.postlist-block .postlist-header .sort-by .sort-state {
+.postlist-block .postlist-header .postlist-options .sort-by .sort-state {
   margin-left: 10px;
   color: rgba(0, 0, 0, 0.2);
   border-bottom: 1px solid black;
 }
-.postlist-block .postlist-header .sort-by a {
+.postlist-block .postlist-header .postlist-options .sort-by a {
   padding: 5px;
   cursor: pointer;
 }
-.postlist-block .postlist-header .create-button {
+.postlist-block .postlist-header .postlist-options .create-button {
   border: 1px solid black;
   padding: 5px 18px;
   border-radius: 7px;
   margin-right: 5px;
   cursor: pointer;
+}
+.postlist-block .post-list-item {
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+.postlist-block .post-list-item.on .post-body {
+  height: auto !important;
+  -webkit-line-clamp: unset !important;
 }
 .postlist-block .post-block {
   background-color: white;
@@ -58,6 +79,7 @@
   margin-bottom: 0.25rem;
   display: flex;
   position: relative;
+  z-index: 0;
 }
 .postlist-block .post-block .liner {
   position: absolute;
@@ -66,6 +88,7 @@
   width: calc(100% + 5px);
   height: 100%;
   overflow: hidden;
+  pointer-events: none;
 }
 .postlist-block .post-block .liner:after {
   content: "Marker";
@@ -94,17 +117,23 @@
   flex-grow: 1;
   padding: 10px 0;
   overflow: hidden;
+  height: auto;
 }
 .postlist-block .post-block .post-content h3 {
   margin: 0;
 }
-.postlist-block .post-block .post-content p {
+.postlist-block .post-block .post-content .post-body {
+  min-height: 3em;
   margin: 0;
   padding-top: 5px;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2; /* Number of lines to show */
   overflow: hidden;
+  white-space: normal;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  word-break: keep-all;
+  word-wrap: break-word;
 }
 .postlist-block .post-block .post-owner {
   flex: 0 0 45px;
@@ -136,9 +165,6 @@
   font-size: 2rem;
   margin-bottom: 0;
   margin-top: 0;
-}
-.postlist-block .post-block h2:hover {
-  color: #666;
 }
 .postlist-block .post-block p {
   margin-top: 2rem;

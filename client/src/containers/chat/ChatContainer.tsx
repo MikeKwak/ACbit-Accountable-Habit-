@@ -3,11 +3,10 @@ import { useParams } from 'react-router-dom';
 import io, { Socket } from 'socket.io-client';
 import Chat from '../../components/chat/Chat';
 import { UserContext } from '../../contexts/UserContext';
-import { PostsContext } from '../../contexts/PostsContext';
 import { Post, PostFormData } from '../posts/PostListContainer';
 import * as postAPI from '../../lib/api/posts';
 import { AxiosResponse } from 'axios';
-
+import { Group } from '../main/MainContainer';
 
 export type Message = {
     message: string;
@@ -17,17 +16,15 @@ export type Message = {
 };
 
 type ChatContainerProps = {
-    users: {
-        username: string;
-        imgURL: string;
-    }[];
+    group: Group | null;
+    setGroup: React.Dispatch<React.SetStateAction<Group | null>>;
 }
 
-const ChatContainer:React.FC<ChatContainerProps> = ({ users }) => {
+const ChatContainer:React.FC<ChatContainerProps> = ({ group, setGroup }) => {
     const { user } = useContext(UserContext);
-    const { setPosts } = useContext(PostsContext);
     const { groupID } = useParams();
     const [messages, setMessages] = useState<Message[]>([]);
+    const [error, setError] = useState<string>('')
     const socket = useRef<Socket | null>(null);
 
     //run when a new socket connection is made (?)
@@ -67,7 +64,6 @@ const ChatContainer:React.FC<ChatContainerProps> = ({ users }) => {
         if(message === ''){
             return;
         }
-
         const createdTime = Date.now();
         socket.current!.emit('send_message', { message, username: user!.username, groupID, createdTime })
     } 
@@ -75,17 +71,31 @@ const ChatContainer:React.FC<ChatContainerProps> = ({ users }) => {
     const createPost = (formData: PostFormData) => {
         postAPI
             .create(groupID!, formData)
-            .then((res: AxiosResponse<Post>) => {
-                setPosts((prevPosts) => [...prevPosts, res.data]);
-                
+            .then((res: AxiosResponse<Post[]>) => {
+                setGroup((prevGroup): Group => ({
+                    ...prevGroup!,
+                    posts: res.data,
+                }));
             })
-            .catch((error) => {
-                console.error('Error fetching groups:', error);
+            .catch((e) => {
+                if (e.response.status === 400) {
+                    if (e.response.data === 'chrono-error') {
+                        setError('invalid input for deadline');
+                        setTimeout(() => {
+                            setError('');
+                        }, 3000);
+                    } else {
+                        setError('failed to create post');
+                        setTimeout(() => {
+                            setError('');
+                        }, 3000);
+                    }
+                }
             });
     };
 
     return(
-        <Chat socket={socket.current!} users={users} messages={messages} sendMessage={sendMessage} createPost={createPost}/>
+        <Chat error={error} group={group} messages={messages} sendMessage={sendMessage} createPost={createPost}/>
     )
 };
 

@@ -4,75 +4,101 @@
 .postlist-block {
     position: relative;
     width: 100%;
+    max-width:500px;
     height: 100%;
     overflow: hidden scroll;
-    background-color: map-get(map-get($palette, gray), '4');
-    padding: 15px;
+    padding: 5px;
 
     .postlist-header {
         display: flex;
         flex-direction: column;
         height: 100px;
-        padding-bottom: 0.5rem;
         background-color: white;
 
-        a {
+        .postlist-status {
             display: flex;
-            align-items: center;
-            padding: 10px 20px;
-            img {
-                width: 20px;
-                height: 20px;
-                margin-right: 5px;
-            }
-        }
-
-        a.active {
-            font-weight: 600;
-            background-color: white;
-        }
-
-        .sort-by {
-            display: flex;
-            align-items: center;
-            padding-left: 5px;
-
-            p {
-                margin: 0;
-            }
-
-            .sort-state {
-                margin-left: 10px;
-                color: #00000033;
-                border-bottom: 1px solid black;
-            }
+            background-color: map-get(map-get($palette, gray), '2');
 
             a {
-                padding: 5px;
+                display: flex;
+                align-items: center;
+                padding: 10px 20px;
+                cursor: pointer;
+
+                img {
+                    width: 20px;
+                    height: 20px;
+                    margin-right: 5px;
+                }
+
+                &.active {
+                    font-weight: 600;
+                    background-color: white;
+                }
+            }
+        }
+
+        .postlist-options {
+            display: flex;
+            margin: auto 0;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+
+            .sort-by {
+                display: flex;
+                align-items: center;
+                padding-left: 5px;
+
+                p {
+                    margin: 0;
+                }
+
+                .sort-state {
+                    margin-left: 10px;
+                    color: #00000033;
+                    border-bottom: 1px solid black;
+                }
+
+                a {
+                    padding: 5px;
+                    cursor: pointer;
+                }
+            }
+
+            .create-button {
+                border: 1px solid black;
+                padding: 5px 18px;
+                border-radius: 7px;
+                margin-right: 5px;
                 cursor: pointer;
             }
         }
+    }
 
-        .create-button {
-            border: 1px solid black;
-            padding: 5px 18px;
-            border-radius: 7px;
-            margin-right: 5px;
-            cursor: pointer;
+    .post-list-item {
+        cursor: pointer;
+        -webkit-user-select:none;
+        -moz-user-select:none;
+        -ms-user-select:none;
+        user-select:none;
+        &.on {
+            .post-body {
+                height: auto !important;
+                -webkit-line-clamp: unset !important;
+            }
         }
     }
 
     .post-block {
         background-color: white;
-        // border: 1px solid black;
-
         width: 100%;
         // height: 100px;
         padding-bottom: 5px;
         margin-bottom: 0.25rem;
         display: flex;
         position: relative;
-
+        z-index: 0;
         .liner {
             position: absolute;
             top: 0;
@@ -80,6 +106,7 @@
             width: calc(100% + 5px);
             height: 100%;
             overflow: hidden;
+            pointer-events: none;
             &:after {
                 content: 'Marker';
                 font-size: 0;
@@ -112,21 +139,27 @@
         .post-content {
             flex-grow: 1;
             padding: 10px 0;
-
             overflow: hidden;
+            height: auto;
 
             h3 {
                 margin: 0;
             }
 
-            p {
+            .post-body {
+                min-height:3em;
                 margin: 0;
                 padding-top: 5px;
-                display: -webkit-box;
-                -webkit-box-orient: vertical;
-                -webkit-line-clamp: 2; /* Number of lines to show */
                 overflow: hidden;
+                white-space: normal;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                word-break: keep-all;   // 문단으로 끊어져서 줄바꿈 됨
+                word-wrap: break-word;
             }
+
         }
 
         .post-owner {
@@ -164,9 +197,9 @@
             margin-bottom: 0;
             margin-top: 0;
 
-            &:hover {
-                color: #666;
-            }
+            // &:hover {
+            //     color: #666;
+            // }
         }
 
         p {

@@ -8,6 +8,7 @@ import { UserContext } from '../../contexts/UserContext';
 
 type PostItemProps = {
     post: Post;
+    imgURL: string;
     completePost: (_id: string) => void;
     deletePost: (_id: string) => void;
     status: string;
@@ -15,6 +16,7 @@ type PostItemProps = {
 
 const PostItem: React.FC<PostItemProps> = ({
     post,
+    imgURL,
     completePost,
     deletePost,
     status,
@@ -23,8 +25,8 @@ const PostItem: React.FC<PostItemProps> = ({
     const { publishedDate, deadlineDate, tags, title, body, _id } = post;
     const [deadlineString, setDeadlineString] = useState('');
     const username = post.user.username;
-    const [imageURL, setImageURL] = useState<string>('');
     const [owner, setOwner] = useState<boolean>(false);
+
     const [init, setInit] = useState(false);
 
     useEffect(() => {
@@ -35,10 +37,6 @@ const PostItem: React.FC<PostItemProps> = ({
         if (user!.username === username) {
             setOwner(true);
         }
-
-        profileAPI.getImage(username).then((res: AxiosResponse<string>) => {
-            setImageURL(res.data);
-        });
         setDeadlineString(displayDate(new Date(deadlineDate)));
     }, []);
 
@@ -86,7 +84,7 @@ const PostItem: React.FC<PostItemProps> = ({
             <div className="post-content">
                 <h3>{title}</h3>
                 <div>#webdev #work</div>
-                <p>{body}</p>
+                <div className='post-body'>{body}</div>
             </div>
 
             <div className="post-owner">
@@ -103,7 +101,7 @@ const PostItem: React.FC<PostItemProps> = ({
                         />
                     ))}
 
-                <img src={imageURL} alt="" />
+                <img src={imgURL} alt="" />
             </div>
         </div>
     );

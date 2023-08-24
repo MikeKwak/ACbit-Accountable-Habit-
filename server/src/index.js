@@ -31,6 +31,7 @@ app.use(
 app.use(bodyParser.json());
 
 app.use(cookieParser());
+//extends JWT if exists in the request, if not, does nothing
 app.use(jwtMiddleware);
 
 const router = express.Router();

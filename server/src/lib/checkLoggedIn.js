@@ -1,11 +1,10 @@
-const checkLoggedin = (req, res, next) => {
+const checkLoggedIn = (req, res, next) => {
     const { user } = res.locals;
     if(!user){
-        res.sendStatus(401)
+        res.sendStatus(401) //unauthorized
         return
     }
-    console.log("logged in")
     return next()
 }
 
-export default checkLoggedin;
+export default checkLoggedIn;

@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/user.js';
 
+//extends JWT if exists in the request, if not, does nothing
 const jwtMiddleware = async (req, res, next) => {
     const token = req.cookies.access_token;
     if (!token) {
@@ -14,7 +15,6 @@ const jwtMiddleware = async (req, res, next) => {
             _id: decoded._id,
             username: decoded.username,
         };
-        // console.log(res.locals.user)
         const now = Math.floor(Date.now() / 1000);
         if (decoded.exp - now < 60 * 60 * 24 * 3.5) {
             const user = await User.findById(decoded._id);

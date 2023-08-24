@@ -4,29 +4,32 @@ import User from '../../models/user.js';
 
 export const list = async (req, res) => {
     const user = await User.findByUsername(res.locals.user.username);
+    //denormalization
     const groupInfoPromises = user.groups.map(async (group) => {
         const groupDocument = await Group.findByID(group.groupID);
+        
         const groupInfo = {
             groupID: groupDocument.groupID,
             name: groupDocument.name,
             users: groupDocument.users,
         };
+        
         return groupInfo;
     });
-
-    const groupInfos = await Promise.all(groupInfoPromises);
-
-    res.send(groupInfos);
+    res.send(await Promise.all(groupInfoPromises));
 };
 
 export const create = async (req, res) => {
+    //validation schema
     const schema = Joi.object().keys({
-        name: Joi.string().required(),
-        password: Joi.string().required(),
+        name: Joi.string().max(20).required(),
+        password: Joi.string().min(8).required(),
     });
+    //validation result / error
     const result = schema.validate(req.body);
     if (result.error) {
-        res.status(400).send(result.error);
+        console.log(result.error.details[0].message)
+        res.status(400).send(result.error.details[0].message); //bad request
         return;
     }
 
@@ -54,7 +57,7 @@ export const create = async (req, res) => {
             users: group.users,
         });
     } catch (e) {
-        res.status(500).send(e);
+        res.status(500).send(e); //internal server error
     }
 };
 
@@ -70,20 +73,20 @@ export const join = async (req, res) => {
         const user = await User.findByUsername(res.locals.user.username);
         if (user.groups.some((group) => group.groupID === groupID)) {
             console.log('already joined');
-            res.sendStatus(401);
+            res.sendStatus(409); //conflict
             return;
         }
 
         const group = await Group.findByID(groupID);
         if (!group) {
             console.log('there is no group to that id');
-            res.sendStatus(401);
+            res.sendStatus(404); //not found
             return;
         }
         const valid = await group.checkPassword(password);
         if (!valid) {
             console.log('wrong password');
-            res.sendStatus(401);
+            res.sendStatus(401); //unauthroized
             return;
         }
 
@@ -102,35 +105,46 @@ export const join = async (req, res) => {
             users: group.users,
         });
     } catch (e) {
-        res.status(500).send(e);
+        res.status(500).send(e); //internal server error
     }
 };
 
 export const leave = async (req, res) => {
     const { groupID } = req.body;
-    const user = await User.findByUsername(res.locals.user.username);
-
     try {
+        const user = await User.findByUsername(res.locals.user.username);
+
         await user.leaveGroup(groupID);
-    } catch {
-        console.log('error leaveGroup');
-    }
 
-    const group = await Group.findByID(groupID);
-
-    if (group.users.length === 1) {
-        await Group.deleteOne({ groupID: groupID });
-        // await Group.save()
-    } else {
-        await group.removeMember(user.username);
-        await group.save();
+        const group = await Group.findByID(groupID);
+        if (!group) {
+            res.sendStatus(404); //not found
+            return;
+        }
+        //if no user left in the group
+        if (group.users.length === 1) {
+            await Group.deleteOne({ groupID: groupID });
+            await Chat.deleteMessages(groupID);
+        } else {
+            group.removeMember(user.username);
+            await group.save();
+        }
+        res.send(user.groups);
+    } catch (e) {
+        res.status(500).send(e); //internal server error
     }
-    res.send(user.groups);
 };
 
 export const get = async (req, res) => {
     const { groupID } = req.params;
-    const group = await Group.findByID(groupID);
-    
-    res.send(group.serialize());
+    try {
+        const group = await Group.findByID(groupID);
+        if (!group) {
+            res.sendStatus(404); //not found
+            return;
+        }
+        res.send(group.serialize());
+    } catch (e) {
+        res.status(500).send(e); //internal server error
+    }
 }

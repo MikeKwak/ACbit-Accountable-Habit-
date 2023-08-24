@@ -1,14 +1,37 @@
 .chat-block {
   display: flex;
   flex-direction: column;
-  width: 100%;
-  height: 100%;
-  padding: 30px;
+  width: 450px;
+  margin: 0 auto;
+  margin-top: 40px;
+  height: 90%;
   border-radius: 10px;
+  position: relative;
+}
+.chat-block .chat-header {
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 100px;
+  background-color: white;
+  border: 1px solid #868e96;
+  box-shadow: 0em 0.4em 1.5em #adb5bd;
+  border-radius: 10px;
+  text-align: center;
+}
+.chat-block .chat-header h2 {
+  margin-top: 15px;
+  margin-bottom: 10px;
+}
+.chat-block .chat-header p {
+  margin: 0;
 }
 .chat-block .messages-block {
   background-color: #8cdbe5;
   padding: 10px;
+  padding-top: 80px;
   border: 1px solid black;
   overflow-y: scroll;
   width: 100%;
@@ -25,6 +48,7 @@
   display: flex;
   gap: 10px;
   margin-bottom: 5px;
+  width: 100%;
 }
 .chat-block .messages-block .message-block .message-profile {
   width: 2em;
@@ -83,6 +107,7 @@
 }
 .chat-block .textarea-block .textarea-section .textarea-container {
   border: solid 1px #000;
+  box-shadow: 0em 0.4em 0.5em rgb(193, 193, 193);
   border-radius: 12px;
   padding: 10px 6px;
   font-size: 1rem;
@@ -100,9 +125,10 @@
 .chat-block .textarea-block .textarea-section .textarea-container:hover {
   cursor: text;
 }
-.chat-block .textarea-block .textarea-section .textarea-container div {
+.chat-block .textarea-block .textarea-section .textarea-container span {
   outline: none;
-  display: inline;
+  display: inline-block;
+  max-width: 100%;
 }
 .chat-block .textarea-block .textarea-section .textarea-container .title,
 .chat-block .textarea-block .textarea-section .textarea-container .body,

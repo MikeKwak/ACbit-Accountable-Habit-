@@ -12,13 +12,7 @@ const MessageItem: React.FC<MessageProps> = ({ message, imgURL }) => {
     const { user } = useContext(UserContext);
 
     const ref = useRef<HTMLDivElement>(null);
-
     useEffect(() => {
-        // profileAPI
-        //     .getImage(message.username)
-        //     .then((res: AxiosResponse<string>) => {
-        //         setImageURL(res.data);
-        //     });
         ref.current?.scrollIntoView({ behavior: 'smooth' });
     }, [message]);
 

@@ -73,9 +73,9 @@ UserSchema.methods.addGroup = function (group) {
 //     this.updateOne({"imgURL": imgURL})
 // };
 
-UserSchema.methods.leaveGroup = function (id) {
+UserSchema.methods.leaveGroup = async function (id) {
     this.groups = this.groups.filter((group) => group.groupID !== id);
-    return this.save();
+    await this.save();
 };
 
 const User = mongoose.model('User', UserSchema);

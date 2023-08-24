@@ -65,7 +65,6 @@ GroupSchema.methods.addMember = function (member) {
 
 GroupSchema.methods.removeMember = async function (username) {
     this.users = this.users.filter((user) => user.username !== username)
-    await this.save();
 }
 
 GroupSchema.methods.addPost = async function (post) {
@@ -96,7 +95,7 @@ GroupSchema.methods.serialize = function () {
 GroupSchema.statics.findByID = async function (id) {
     return await this.findOne({ groupID : id });
 };
-
+//for updating user image
 GroupSchema.statics.findGroupsByUsername = async function (username) {
     return await this.find({ 'users.username': username });
 };

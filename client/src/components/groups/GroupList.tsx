@@ -5,6 +5,7 @@ import { UserContext } from '../../contexts/UserContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import defaultPicture from '../../img/default.png';
+import deletedPicture from '../../img/default.png'
 
 import '../../styles/groups/GroupPage.scss';
 
@@ -15,17 +16,33 @@ type GroupItemProps = {
 
 const GroupItem: React.FC<GroupItemProps> = ({ group, deleteGroup }) => {
     const { user } = useContext(UserContext);
-    const { name, groupID, users } = group;
-    const [init, setInit] = useState(false);
-    console.log(group);
-    console.log(users);
     const username = user?.username;
+    const { name, groupID, users } = group;
+
+    const [init, setInit] = useState(false);
 
     useEffect(() => {
+        console.log(users)
         setTimeout(() => {
             setInit(true);
         }, 250);
     }, []);
+
+    const getUserImgURL = (username: string) => {
+        if (username === user!.username && user!.imgURL) {
+            return user!.imgURL;            
+        }
+
+        const groupUser = users.find((user) => user.username === username);
+        if (!groupUser){
+            return deletedPicture;
+        } else {
+            if (groupUser.imgURL) {
+                return groupUser.imgURL;
+            } 
+        }
+        return defaultPicture;
+    };
 
     return (
         <div className="card">
@@ -34,22 +51,29 @@ const GroupItem: React.FC<GroupItemProps> = ({ group, deleteGroup }) => {
                     <div className={`liner ${init ? 'init' : ''}`}></div>
                     <span className="name">{name}</span>
                     <div className="dropdown">
-                        <FontAwesomeIcon className="icon" icon={faCaretDown} />
-                        <button
-                            className="delete-button"
-                            onClick={() => {
-                                deleteGroup(groupID);
-                            }}
-                        >
-                            <FontAwesomeIcon icon={faTrashAlt} />
-                        </button>
-                    </div>
+                <FontAwesomeIcon className="icon" icon={faCaretDown} />
+                <button
+                    className="delete-button"
+                    onClick={() => {
+                        deleteGroup(groupID);
+                    }}
+                >
+                    <FontAwesomeIcon icon={faTrashAlt} />
+                </button>
+            </div>
                 </div>
             </Link>
+            
             <div className="controller">
-                {users.map((user) => (
+                {users.map((u) => (
                     <img
-                        src={user.imgURL ? user.imgURL : defaultPicture}
+                        src={
+                            u.username = user!.username
+                                ? (user!.imgURL
+                                    ? user!.imgURL
+                                    : defaultPicture)
+                                : getUserImgURL(u.username)
+                        }
                         alt="profile"
                     />
                 ))}
