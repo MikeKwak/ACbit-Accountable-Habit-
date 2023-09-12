@@ -30,6 +30,10 @@ const WhiteBox = styled.div`
     width: 360px;
     background: white;
     border-radius: 2px;
+
+    @media (max-width: 400px) {
+        width: 100%; 
+    }
 `;
 
 const AuthTemplate = ({ children } : { children: ReactNode}) => {

@@ -1,30 +1,33 @@
-.grid-container {
-  display: grid;
-  grid-template-columns: 1fr 1.25fr;
-  grid-template-rows: 500px;
-  -moz-column-gap: 1em;
-       column-gap: 1em;
+.grouplist-container {
+  width: 100%;
+  display: flex;
+  gap: 1em;
 }
-.grid-container .column1 {
-  grid-column: 1;
+.grouplist-container .column1 {
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
-.grid-container .column2 {
-  grid-column: 2;
+.grouplist-container .column2 {
+  width: 280px;
 }
-.grid-container .column2 .groupList-block::-webkit-scrollbar {
+.grouplist-container .column2 .groupList-block::-webkit-scrollbar {
   display: none;
 }
-.grid-container .column2 .groupList-block {
+.grouplist-container .column2 .groupList-block {
   height: 100%;
+  max-height: 500px;
   overflow-y: scroll;
   display: flex;
   flex-direction: column;
 }
-.grid-container .column2 .groupList-block .card {
+.grouplist-container .column2 .groupList-block .card {
   margin-bottom: 10px;
   z-index: 0;
 }
-.grid-container .column2 .groupList-block .card .card-content {
+.grouplist-container .column2 .groupList-block .card .card-content {
   position: relative;
   width: 100%;
   height: 75px;
@@ -39,12 +42,12 @@
   overflow: hidden;
   cursor: pointer;
 }
-.grid-container .column2 .groupList-block .card .card-content .name {
+.grouplist-container .column2 .groupList-block .card .card-content .name {
   position: relative;
   display: block;
   z-index: 10;
 }
-.grid-container .column2 .groupList-block .card .card-content .dropdown {
+.grouplist-container .column2 .groupList-block .card .card-content .dropdown {
   position: absolute;
   width: 25px;
   margin: 7px;
@@ -54,14 +57,14 @@
   display: flex;
   justify-content: center;
 }
-.grid-container .column2 .groupList-block .card .card-content .dropdown .icon {
+.grouplist-container .column2 .groupList-block .card .card-content .dropdown .icon {
   transform: rotateZ(90deg);
 }
-.grid-container .column2 .groupList-block .card .card-content .dropdown:hover .icon {
+.grouplist-container .column2 .groupList-block .card .card-content .dropdown:hover .icon {
   transition: all 0.5s ease;
   transform: rotateZ(0deg);
 }
-.grid-container .column2 .groupList-block .card .card-content .delete-button {
+.grouplist-container .column2 .groupList-block .card .card-content .delete-button {
   transition: all 0.5s ease;
   display: none;
   position: absolute;
@@ -70,10 +73,10 @@
   z-index: 10;
   cursor: pointer;
 }
-.grid-container .column2 .groupList-block .card .card-content .dropdown:hover .delete-button {
+.grouplist-container .column2 .groupList-block .card .card-content .dropdown:hover .delete-button {
   display: block;
 }
-.grid-container .column2 .groupList-block .card .card-content .liner {
+.grouplist-container .column2 .groupList-block .card .card-content .liner {
   position: absolute;
   top: 0;
   left: 0;
@@ -81,7 +84,7 @@
   height: 100%;
   overflow: hidden;
 }
-.grid-container .column2 .groupList-block .card .card-content .liner:after {
+.grouplist-container .column2 .groupList-block .card .card-content .liner:after {
   content: "Marker";
   font-size: 0;
   position: absolute;
@@ -95,13 +98,13 @@
   z-index: 9;
   transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
-.grid-container .column2 .groupList-block .card .card-content .liner.init:after {
+.grouplist-container .column2 .groupList-block .card .card-content .liner.init:after {
   left: -10%;
 }
-.grid-container .column2 .groupList-block .card:hover .controller {
+.grouplist-container .column2 .groupList-block .card:hover .controller {
   margin-top: -5px;
 }
-.grid-container .column2 .groupList-block .card .controller {
+.grouplist-container .column2 .groupList-block .card .controller {
   display: flex;
   border-radius: 5px;
   align-items: center;
@@ -113,13 +116,26 @@
   background-color: #ddd;
   transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
-.grid-container .column2 .groupList-block .card .controller img {
+.grouplist-container .column2 .groupList-block .card .controller img {
   width: 1.5em;
   height: 1.5em;
   -o-object-fit: cover;
      object-fit: cover;
   border-radius: 50%;
   margin-left: 5px;
+}
+@media (max-width: 600px) {
+  .grouplist-container {
+    flex-direction: column; /* Switch to a column flexbox */
+  }
+  .grouplist-container .column1,
+  .grouplist-container .column2 {
+    width: 100%; /* Both columns take up 100% width */
+  }
+  .grouplist-container .column1 .groupList-block,
+  .grouplist-container .column2 .groupList-block {
+    max-height: 350px;
+  }
 }
 
 .profile-block {

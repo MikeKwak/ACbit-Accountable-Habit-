@@ -31,11 +31,22 @@ const WhiteBox = styled.div`
         letter-spacing: 2px;
     }
 
+    .content {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.025);
     padding: 2rem;
 
     background: white;
     border-radius: 2px;
+
+    @media (max-width: 600px) {
+        width: 100%;
+    }
 `;
 
 const GroupTemplate = ({ children }: { children: ReactNode }) => {

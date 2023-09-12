@@ -1,27 +1,31 @@
 @import '../../lib/styles/palette.scss';
 
 .main-grid-container {
+    box-sizing: border-box;
     height: calc(100vh - 5rem);
     width: 100%;
+    padding: 0 50px;
     padding-top: 40px;
     display: flex;
+
+    .profile-container {
+        width: 20%
+    }
+    
+    .chat-container {
+        grid-column: 2;
+        width: 45%;
+    }
+    
+    .posts-container {
+        grid-column: 3;
+        width: 35%;
+    }
 }
 
 .grid {
-    border-radius: 5px;
     height: 100%;
     width: 100%;
 }
 
-.profile-container {
-    width:250px;
-}
 
-.chat-container {
-    grid-column: 2;
-    height: 100%;
-}
-
-.posts-container {
-    grid-column: 3;
-}

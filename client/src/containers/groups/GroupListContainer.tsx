@@ -106,7 +106,7 @@ const GroupListContainer: React.FC = () => {
     }, []);
 
     return (
-        <div className="grid-container">
+        <div className="grouplist-container">
             <div className="column1">
                 <ProfileContainer />
                 <GroupForm
